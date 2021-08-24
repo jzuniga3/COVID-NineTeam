@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0873ddc4-dec9-4e63-a86f-68922f573a3d" name="Default Changelist" comment="addes profile screen!">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/ProfileScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProfileScreen.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="origin/main" />
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="origin/main" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1pohOyAdXMtmPIYUc2KRNp5aZer" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="js.last.introduce.type" value="CONST" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="React Native.Debug">
+    <configuration name="Edamam.js" type="NodeJSConfigurationType" temporary="true" nameIsGenerated="true" path-to-js-file="Edamam.js" working-dir="$PROJECT_DIR$/components">
+      <method v="2" />
+    </configuration>
+    <configuration name="Debug" type="ReactNative" factoryName="React Native">
+      <node-interpreter value="project" />
+      <react-native value="$PROJECT_DIR$/node_modules/react-native" />
+      <platform value="ANDROID" />
+      <envs />
+      <only-packager />
+      <build-and-launch value="false" />
+      <browser value="98ca6316-2f89-46d9-a9e5-fa9e2b0625b3" />
+      <debug-host value="127.0.0.1" />
+      <debug-port value="19000" />
+      <method v="2">
+        <option name="ReactNativePackager" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Node.js.Edamam.js" />
+      <item itemvalue="React Native.Debug" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Node.js.Edamam.js" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0873ddc4-dec9-4e63-a86f-68922f573a3d" name="Default Changelist" comment="" />
+      <created>1615855321440</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1615855321440</updated>
+      <workItem from="1615855323223" duration="2475000" />
+      <workItem from="1615941949308" duration="1085000" />
+      <workItem from="1615943390583" duration="634000" />
+      <workItem from="1616013460541" duration="7672000" />
+      <workItem from="1616031647126" duration="1667000" />
+      <workItem from="1616098442999" duration="2685000" />
+      <workItem from="1616103867595" duration="7833000" />
+      <workItem from="1616295141996" duration="339000" />
+      <workItem from="1616339184982" duration="1799000" />
+      <workItem from="1616375900485" duration="2478000" />
+      <workItem from="1616765091731" duration="301000" />
+      <workItem from="1616858043806" duration="4962000" />
+      <workItem from="1617044824386" duration="4251000" />
+      <workItem from="1617584596867" duration="554000" />
+      <workItem from="1617515456183" duration="6956000" />
+      <workItem from="1617546129585" duration="941000" />
+      <workItem from="1617547092399" duration="248000" />
+      <workItem from="1618356004035" duration="2811000" />
+      <workItem from="1618967342194" duration="2114000" />
+      <workItem from="1618972872379" duration="538000" />
+      <workItem from="1619131614559" duration="6799000" />
+      <workItem from="1619140884734" duration="2139000" />
+    </task>
+    <task id="LOCAL-00001" summary="fixed navigation and log out">
+      <created>1616114164304</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1616114164304</updated>
+    </task>
+    <task id="LOCAL-00002" summary="creates globalStyles sheet to for the entire application">
+      <created>1616368529094</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1616368529094</updated>
+    </task>
+    <task id="LOCAL-00003" summary="adds barcode scanner,&#10;adds camera permissions for ios and android,&#10;****DO NOT MERGE, needs to be integrated properly into the home screen class">
+      <created>1616862809549</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1616862809549</updated>
+    </task>
+    <task id="LOCAL-00004" summary="removes import from homescreen, allows code to function as is">
+      <created>1616862931004</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1616862931004</updated>
+    </task>
+    <task id="LOCAL-00005" summary="made change in alert">
+      <created>1617546599657</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1617546599658</updated>
+    </task>
+    <task id="LOCAL-00006" summary="made change in alert">
+      <created>1617546722815</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1617546722815</updated>
+    </task>
+    <task id="LOCAL-00007" summary="made some change in alert">
+      <created>1617546833687</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1617546833687</updated>
+    </task>
+    <task id="LOCAL-00008" summary="adds some documentation to certain parts of the app&#10;removes styles within ForgotPassword.js, BarcodeScanner.js, and SettingsScreen.js. Adds them to globalstyles.js code&#10;renames Profile.js to MainNavigation.js , Profile.js will be reused in a later time.">
+      <created>1618443708095</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1618443708095</updated>
+    </task>
+    <task id="LOCAL-00009" summary="made changes in the user name look up within firebase. Was done in collaboration with Austin Mathews and Mohfez Rahman and Nick Bectel">
+      <created>1619138140026</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1619138140026</updated>
+    </task>
+    <task id="LOCAL-00010" summary="addes profile screen!">
+      <created>1619140996645</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1619140996645</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fixed navigation and log out" />
+    <MESSAGE value="creates globalStyles sheet to for the entire application" />
+    <MESSAGE value="adds barcode scanner,&#10;adds camera permissions for ios and android,&#10;****DO NOT MERGE, needs to be integrated properly into the home screen class" />
+    <MESSAGE value="removes import from homescreen, allows code to function as is" />
+    <MESSAGE value="made change in alert" />
+    <MESSAGE value="made some change in alert" />
+    <MESSAGE value="adds some documentation to certain parts of the app&#10;removes styles within ForgotPassword.js, BarcodeScanner.js, and SettingsScreen.js. Adds them to globalstyles.js code&#10;renames Profile.js to MainNavigation.js , Profile.js will be reused in a later time." />
+    <MESSAGE value="made changes in the user name look up within firebase. Was done in collaboration with Austin Mathews and Mohfez Rahman and Nick Bectel" />
+    <MESSAGE value="addes profile screen!" />
+    <option name="LAST_COMMIT_MESSAGE" value="addes profile screen!" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/components/BarcodeScanner.js</url>
+          <line>76</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

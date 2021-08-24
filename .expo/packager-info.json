@@ -1,0 +1,10 @@
+{
+  "expoServerNgrokUrl": "https://9f-4pk.alexv1832.weightapp.exp.direct",
+  "packagerNgrokUrl": "https://packager.9f-4pk.alexv1832.weightapp.exp.direct",
+  "ngrokPid": 8273,
+  "expoServerPort": 19000,
+  "packagerPort": 19000,
+  "packagerPid": null,
+  "webpackServerPort": null,
+  "devToolsPort": 19002
+}
