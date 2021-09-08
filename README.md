@@ -1,6 +1,12 @@
 
 # WeightApp
 Exchange Weight App
+<h3>Client</h3>
+
+Dr. Ramata Cisse
+
+![cissePic](https://user-images.githubusercontent.com/59615199/132431432-4988b11b-3439-4a82-bc8d-cda5f2e3e4cf.png)
+
 
 <h3>Team Structure</h3>
 
