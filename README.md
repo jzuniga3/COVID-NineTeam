@@ -20,6 +20,11 @@ Turner Nalley - Documentation Lead, Testing Lead, and Data Modeler
 
 <h3>Description</h3>
 
+Dr. Ramata and team Covid-NineTeam aims to create an app to encourage people to meet their weight management goals.
+Users of the app should gain motivation from others with similar goals to encourage them to continue their goals.
+Weight is “exchanged” between users to allow each other to reach their desired weight. Mass cannot be created or destroyed but is rather transferred from those with excess to those who require more.
+
+
 <h3>Technologies</h3> 
 
 <h2>Data Sets</h2>
