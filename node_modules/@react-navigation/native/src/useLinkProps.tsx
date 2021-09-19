@@ -1,13 +1,15 @@
-import * as React from 'react';
-import { Platform, GestureResponderEvent } from 'react-native';
 import {
   NavigationAction,
+  NavigationContainerRefContext,
   NavigationHelpersContext,
 } from '@react-navigation/core';
-import useLinkTo from './useLinkTo';
+import * as React from 'react';
+import { GestureResponderEvent, Platform } from 'react-native';
 
-type Props = {
-  to: string;
+import useLinkTo, { To } from './useLinkTo';
+
+type Props<ParamList extends ReactNavigation.RootParamList> = {
+  to: To<ParamList>;
   action?: NavigationAction;
 };
 
@@ -17,9 +19,12 @@ type Props = {
  * @param props.to Absolute path to screen (e.g. `/feeds/hot`).
  * @param props.action Optional action to use for in-page navigation. By default, the path is parsed to an action based on linking config.
  */
-export default function useLinkProps({ to, action }: Props) {
+export default function useLinkProps<
+  ParamList extends ReactNavigation.RootParamList
+>({ to, action }: Props<ParamList>) {
+  const root = React.useContext(NavigationContainerRefContext);
   const navigation = React.useContext(NavigationHelpersContext);
-  const linkTo = useLinkTo();
+  const linkTo = useLinkTo<ParamList>();
 
   const onPress = (
     e?: React.MouseEvent<HTMLAnchorElement, MouseEvent> | GestureResponderEvent
@@ -45,18 +50,14 @@ export default function useLinkProps({ to, action }: Props) {
       if (action) {
         if (navigation) {
           navigation.dispatch(action);
+        } else if (root) {
+          root.dispatch(action);
         } else {
-          throw new Error("Couldn't find a navigation object.");
-        }
-      } else {
-        if (typeof to !== 'string') {
           throw new Error(
-            `To 'to' option is invalid (found '${String(
-              to
-            )}'. It must be a valid string for navigation.`
+            "Couldn't find a navigation object. Is your component inside NavigationContainer?"
           );
         }
-
+      } else {
         linkTo(to);
       }
     }

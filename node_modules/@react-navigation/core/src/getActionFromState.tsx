@@ -1,25 +1,30 @@
 import type {
-  Route,
-  PartialRoute,
-  ParamListBase,
-  NavigationState,
-  PartialState,
   CommonActions,
+  NavigationState,
+  ParamListBase,
+  PartialRoute,
+  PartialState,
+  Route,
 } from '@react-navigation/routers';
-import type { PathConfig, PathConfigMap, NavigatorScreenParams } from './types';
+
+import type { NavigatorScreenParams, PathConfig, PathConfigMap } from './types';
 
 type ConfigItem = {
   initialRouteName?: string;
   screens?: Record<string, ConfigItem>;
 };
 
-type Options = { initialRouteName?: string; screens: PathConfigMap };
+type Options = {
+  initialRouteName?: string;
+  screens: PathConfigMap<object>;
+};
 
 type NavigateAction<State extends NavigationState> = {
   type: 'NAVIGATE';
   payload: {
     name: string;
     params?: NavigatorScreenParams<State>;
+    path?: string;
   };
 };
 
@@ -28,7 +33,9 @@ export default function getActionFromState(
   options?: Options
 ): NavigateAction<NavigationState> | CommonActions.Action | undefined {
   // Create a normalized configs object which will be easier to use
-  const normalizedConfig = options ? createNormalizedConfigItem(options) : {};
+  const normalizedConfig = options
+    ? createNormalizedConfigItem(options as PathConfig<object> | string)
+    : {};
 
   const routes =
     state.index != null ? state.routes.slice(0, state.index + 1) : state.routes;
@@ -61,7 +68,9 @@ export default function getActionFromState(
     NavigationState
   >;
 
-  let payload = route ? { name: route.name, params } : undefined;
+  let payload = route
+    ? { name: route.name, path: route.path, params }
+    : undefined;
 
   while (current) {
     if (current.routes.length === 0) {
@@ -107,6 +116,7 @@ export default function getActionFromState(
         NavigationState
       >;
     } else {
+      params.path = route.path;
       params.params = route.params;
     }
 
@@ -126,7 +136,7 @@ export default function getActionFromState(
   };
 }
 
-const createNormalizedConfigItem = (config: PathConfig | string) =>
+const createNormalizedConfigItem = (config: PathConfig<object> | string) =>
   typeof config === 'object' && config != null
     ? {
         initialRouteName: config.initialRouteName,
@@ -137,7 +147,7 @@ const createNormalizedConfigItem = (config: PathConfig | string) =>
       }
     : {};
 
-const createNormalizedConfigs = (options: PathConfigMap) =>
+const createNormalizedConfigs = (options: PathConfigMap<object>) =>
   Object.entries(options).reduce<Record<string, ConfigItem>>((acc, [k, v]) => {
     acc[k] = createNormalizedConfigItem(v);
     return acc;

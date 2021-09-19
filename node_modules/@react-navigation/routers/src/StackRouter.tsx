@@ -1,12 +1,13 @@
 import { nanoid } from 'nanoid/non-secure';
+
 import BaseRouter from './BaseRouter';
 import type {
-  NavigationState,
   CommonNavigationAction,
-  Router,
   DefaultRouterOptions,
-  Route,
+  NavigationState,
   ParamListBase,
+  Route,
+  Router,
 } from './types';
 
 export type StackActionType =
@@ -18,7 +19,7 @@ export type StackActionType =
     }
   | {
       type: 'PUSH';
-      payload: { name: string; key?: string | undefined; params?: object };
+      payload: { name: string; params?: object };
       source?: string;
       target?: string;
     }
@@ -36,14 +37,13 @@ export type StackActionType =
 
 export type StackRouterOptions = DefaultRouterOptions;
 
-export type StackNavigationState<
-  ParamList extends ParamListBase
-> = NavigationState<ParamList> & {
-  /**
-   * Type of the router, in this case, it's stack.
-   */
-  type: 'stack';
-};
+export type StackNavigationState<ParamList extends ParamListBase> =
+  NavigationState<ParamList> & {
+    /**
+     * Type of the router, in this case, it's stack.
+     */
+    type: 'stack';
+  };
 
 export type StackActionHelpers<ParamList extends ParamListBase> = {
   /**
@@ -54,8 +54,8 @@ export type StackActionHelpers<ParamList extends ParamListBase> = {
    */
   replace<RouteName extends keyof ParamList>(
     ...args: undefined extends ParamList[RouteName]
-      ? [RouteName] | [RouteName, ParamList[RouteName]]
-      : [RouteName, ParamList[RouteName]]
+      ? [screen: RouteName] | [screen: RouteName, params: ParamList[RouteName]]
+      : [screen: RouteName, params: ParamList[RouteName]]
   ): void;
 
   /**
@@ -66,8 +66,8 @@ export type StackActionHelpers<ParamList extends ParamListBase> = {
    */
   push<RouteName extends keyof ParamList>(
     ...args: undefined extends ParamList[RouteName]
-      ? [RouteName] | [RouteName, ParamList[RouteName]]
-      : [RouteName, ParamList[RouteName]]
+      ? [screen: RouteName] | [screen: RouteName, params: ParamList[RouteName]]
+      : [screen: RouteName, params: ParamList[RouteName]]
   ): void;
 
   /**
@@ -261,20 +261,13 @@ export default function StackRouter(options: StackRouterOptions) {
             const getId = options.routeGetIdList[action.payload.name];
             const id = getId?.({ params: action.payload.params });
 
-            const route =
-              action.payload.name && action.payload.key
-                ? state.routes.find(
-                    (route) =>
-                      route.name === action.payload.name &&
-                      route.key === action.payload.key
-                  )
-                : id
-                ? state.routes.find(
-                    (route) =>
-                      route.name === action.payload.name &&
-                      id === getId?.({ params: route.params })
-                  )
-                : undefined;
+            const route = id
+              ? state.routes.find(
+                  (route) =>
+                    route.name === action.payload.name &&
+                    id === getId?.({ params: route.params })
+                )
+              : undefined;
 
             let routes: Route<string>[];
 
@@ -283,19 +276,18 @@ export default function StackRouter(options: StackRouterOptions) {
               routes.push({
                 ...route,
                 params:
-                  action.payload.params !== undefined
+                  routeParamList[action.payload.name] !== undefined
                     ? {
-                        ...route.params,
+                        ...routeParamList[action.payload.name],
                         ...action.payload.params,
                       }
-                    : route.params,
+                    : action.payload.params,
               });
             } else {
               routes = [
                 ...state.routes,
                 {
-                  key:
-                    action.payload.key ?? `${action.payload.name}-${nanoid()}`,
+                  key: `${action.payload.name}-${nanoid()}`,
                   name: action.payload.name,
                   params:
                     routeParamList[action.payload.name] !== undefined
@@ -409,6 +401,7 @@ export default function StackRouter(options: StackRouterOptions) {
                   key:
                     action.payload.key ?? `${action.payload.name}-${nanoid()}`,
                   name: action.payload.name,
+                  path: action.payload.path,
                   params:
                     routeParamList[action.payload.name] !== undefined
                       ? {
@@ -430,7 +423,17 @@ export default function StackRouter(options: StackRouterOptions) {
 
             let params;
 
-            if (action.payload.merge === false) {
+            if (action.payload.merge) {
+              params =
+                action.payload.params !== undefined ||
+                routeParamList[route.name] !== undefined
+                  ? {
+                      ...routeParamList[route.name],
+                      ...route.params,
+                      ...action.payload.params,
+                    }
+                  : route.params;
+            } else {
               params =
                 routeParamList[route.name] !== undefined
                   ? {
@@ -438,13 +441,6 @@ export default function StackRouter(options: StackRouterOptions) {
                       ...action.payload.params,
                     }
                   : action.payload.params;
-            } else {
-              params = action.payload.params
-                ? {
-                    ...route.params,
-                    ...action.payload.params,
-                  }
-                : route.params;
             }
 
             return {
@@ -452,8 +448,13 @@ export default function StackRouter(options: StackRouterOptions) {
               index,
               routes: [
                 ...state.routes.slice(0, index),
-                params !== route.params
-                  ? { ...route, params }
+                params !== route.params ||
+                (action.payload.path && action.payload.path !== route.path)
+                  ? {
+                      ...route,
+                      path: action.payload.path ?? route.path,
+                      params,
+                    }
                   : state.routes[index],
               ],
             };

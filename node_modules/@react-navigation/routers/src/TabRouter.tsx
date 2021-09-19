@@ -1,13 +1,14 @@
 import { nanoid } from 'nanoid/non-secure';
+
 import BaseRouter from './BaseRouter';
 import type {
-  NavigationState,
-  PartialState,
   CommonNavigationAction,
-  Router,
   DefaultRouterOptions,
-  Route,
+  NavigationState,
   ParamListBase,
+  PartialState,
+  Route,
+  Router,
 } from './types';
 
 export type TabActionType = {
@@ -51,8 +52,8 @@ export type TabActionHelpers<ParamList extends ParamListBase> = {
    */
   jumpTo<RouteName extends Extract<keyof ParamList, string>>(
     ...args: undefined extends ParamList[RouteName]
-      ? [RouteName] | [RouteName, ParamList[RouteName]]
-      : [RouteName, ParamList[RouteName]]
+      ? [screen: RouteName] | [screen: RouteName, params: ParamList[RouteName]]
+      : [screen: RouteName, params: ParamList[RouteName]]
   ): void;
 };
 
@@ -140,7 +141,7 @@ const changeIndex = (
 
 export default function TabRouter({
   initialRouteName,
-  backBehavior = 'history',
+  backBehavior = 'firstRoute',
 }: TabRouterOptions) {
   const router: Router<
     TabNavigationState<ParamListBase>,
@@ -188,9 +189,9 @@ export default function TabRouter({
       }
 
       const routes = routeNames.map((name) => {
-        const route = (state as PartialState<
-          TabNavigationState<ParamListBase>
-        >).routes.find((r) => r.name === name);
+        const route = (
+          state as PartialState<TabNavigationState<ParamListBase>>
+        ).routes.find((r) => r.name === name);
 
         return {
           ...route,
@@ -307,40 +308,42 @@ export default function TabRouter({
           return changeIndex(
             {
               ...state,
-              routes:
-                action.payload.params !== undefined
-                  ? state.routes.map((route, i) => {
-                      if (i !== index) {
-                        return route;
-                      }
+              routes: state.routes.map((route, i) => {
+                if (i !== index) {
+                  return route;
+                }
 
-                      let params;
+                let params;
 
-                      if (
-                        action.type === 'NAVIGATE' &&
-                        action.payload.merge === false
-                      ) {
-                        params =
-                          routeParamList[route.name] !== undefined
-                            ? {
-                                ...routeParamList[route.name],
-                                ...action.payload.params,
-                              }
-                            : action.payload.params;
-                      } else {
-                        params = action.payload.params
-                          ? {
-                              ...route.params,
-                              ...action.payload.params,
-                            }
-                          : route.params;
-                      }
+                if (action.type === 'NAVIGATE' && action.payload.merge) {
+                  params =
+                    action.payload.params !== undefined ||
+                    routeParamList[route.name] !== undefined
+                      ? {
+                          ...routeParamList[route.name],
+                          ...route.params,
+                          ...action.payload.params,
+                        }
+                      : route.params;
+                } else {
+                  params =
+                    routeParamList[route.name] !== undefined
+                      ? {
+                          ...routeParamList[route.name],
+                          ...action.payload.params,
+                        }
+                      : action.payload.params;
+                }
 
-                      return params !== route.params
-                        ? { ...route, params }
-                        : route;
-                    })
-                  : state.routes,
+                const path =
+                  action.type === 'NAVIGATE' && action.payload.path != null
+                    ? action.payload.path
+                    : route.path;
+
+                return params !== route.params || path !== route.path
+                  ? { ...route, path, params }
+                  : route;
+              }),
             },
             index,
             backBehavior,

@@ -9,40 +9,39 @@ type NavigationRoute<
   state?: NavigationState | PartialState<NavigationState>;
 };
 
-export type NavigationState<
-  ParamList extends ParamListBase = ParamListBase
-> = Readonly<{
-  /**
-   * Unique key for the navigation state.
-   */
-  key: string;
-  /**
-   * Index of the currently focused route.
-   */
-  index: number;
-  /**
-   * List of valid route names as defined in the screen components.
-   */
-  routeNames: Extract<keyof ParamList, string>[];
-  /**
-   * Alternative entries for history.
-   */
-  history?: unknown[];
-  /**
-   * List of rendered routes.
-   */
-  routes: NavigationRoute<ParamList, keyof ParamList>[];
-  /**
-   * Custom type for the state, whether it's for tab, stack, drawer etc.
-   * During rehydration, the state will be discarded if type doesn't match with router type.
-   * It can also be used to detect the type of the navigator we're dealing with.
-   */
-  type: string;
-  /**
-   * Whether the navigation state has been rehydrated.
-   */
-  stale: false;
-}>;
+export type NavigationState<ParamList extends ParamListBase = ParamListBase> =
+  Readonly<{
+    /**
+     * Unique key for the navigation state.
+     */
+    key: string;
+    /**
+     * Index of the currently focused route.
+     */
+    index: number;
+    /**
+     * List of valid route names as defined in the screen components.
+     */
+    routeNames: Extract<keyof ParamList, string>[];
+    /**
+     * Alternative entries for history.
+     */
+    history?: unknown[];
+    /**
+     * List of rendered routes.
+     */
+    routes: NavigationRoute<ParamList, keyof ParamList>[];
+    /**
+     * Custom type for the state, whether it's for tab, stack, drawer etc.
+     * During rehydration, the state will be discarded if type doesn't match with router type.
+     * It can also be used to detect the type of the navigator we're dealing with.
+     */
+    type: string;
+    /**
+     * Whether the navigation state has been rehydrated.
+     */
+    stale: false;
+  }>;
 
 export type InitialState = Readonly<
   Partial<Omit<NavigationState, 'stale' | 'routes'>> & {
@@ -75,6 +74,11 @@ export type Route<
    * User-provided name for the route.
    */
   name: RouteName;
+  /**
+   * Path associated with the route.
+   * Usually present when the screen was opened from a deep link.
+   */
+  path?: string;
 }> &
   (undefined extends Params
     ? Readonly<{

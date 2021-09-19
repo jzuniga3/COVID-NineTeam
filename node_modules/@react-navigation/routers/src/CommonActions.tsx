@@ -16,8 +16,20 @@ export type Action =
   | {
       type: 'NAVIGATE';
       payload:
-        | { key: string; name?: undefined; params?: object; merge?: boolean }
-        | { name: string; key?: string; params?: object; merge?: boolean };
+        | {
+            key: string;
+            name?: undefined;
+            params?: object;
+            path?: string;
+            merge?: boolean;
+          }
+        | {
+            name: string;
+            key?: string;
+            params?: object;
+            path?: string;
+            merge?: boolean;
+          };
       source?: string;
       target?: string;
     }
@@ -39,9 +51,15 @@ export function goBack(): Action {
 }
 
 export function navigate(
-  route:
-    | { key: string; params?: object }
-    | { name: string; key?: string; params?: object }
+  options:
+    | { key: string; params?: object; path?: string; merge?: boolean }
+    | {
+        name: string;
+        key?: string;
+        params?: object;
+        path?: string;
+        merge?: boolean;
+      }
 ): Action;
 // eslint-disable-next-line no-redeclare
 export function navigate(name: string, params?: object): Action;

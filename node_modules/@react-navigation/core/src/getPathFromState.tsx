@@ -1,13 +1,18 @@
-import * as queryString from 'query-string';
 import type {
   NavigationState,
   PartialState,
   Route,
 } from '@react-navigation/routers';
-import checkLegacyPathConfig from './checkLegacyPathConfig';
-import type { PathConfig, PathConfigMap } from './types';
+import * as queryString from 'query-string';
 
-type Options = { initialRouteName?: string; screens: PathConfigMap };
+import fromEntries from './fromEntries';
+import type { PathConfig, PathConfigMap } from './types';
+import validatePathConfig from './validatePathConfig';
+
+type Options<ParamList> = {
+  initialRouteName?: string;
+  screens: PathConfigMap<ParamList>;
+};
 
 type State = NavigationState | Omit<PartialState<NavigationState>, 'stale'>;
 
@@ -61,9 +66,9 @@ const getActiveRoute = (state: State): { name: string; params?: object } => {
  * @param options Extra options to fine-tune how to serialize the path.
  * @returns Path representing the state, e.g. /foo/bar?count=42.
  */
-export default function getPathFromState(
+export default function getPathFromState<ParamList extends {}>(
   state: State,
-  options?: Options
+  options?: Options<ParamList>
 ): string {
   if (state == null) {
     throw Error(
@@ -71,11 +76,13 @@ export default function getPathFromState(
     );
   }
 
-  const [legacy, compatOptions] = checkLegacyPathConfig(options);
+  if (options) {
+    validatePathConfig(options);
+  }
 
   // Create a normalized configs object which will be easier to use
-  const configs: Record<string, ConfigItem> = compatOptions
-    ? createNormalizedConfigs(legacy, compatOptions.screens)
+  const configs: Record<string, ConfigItem> = options?.screens
+    ? createNormalizedConfigs(options?.screens)
     : {};
 
   let path = '/';
@@ -177,12 +184,6 @@ export default function getPathFromState(
           // Showing the route name seems ok, though whatever we show here will be incorrect
           // Since the page doesn't actually exist
           if (p === '*') {
-            if (legacy) {
-              throw new Error(
-                "Please update your config to the new format to use wildcard pattern ('*'). https://reactnavigation.org/docs/configuring-links/#updating-config"
-              );
-            }
-
             return route.name;
           }
 
@@ -219,7 +220,7 @@ export default function getPathFromState(
         }
       }
 
-      const query = queryString.stringify(focusedParams);
+      const query = queryString.stringify(focusedParams, { sort: false });
 
       if (query) {
         path += `?${query}`;
@@ -236,17 +237,6 @@ export default function getPathFromState(
   return path;
 }
 
-// Object.fromEntries is not available in older iOS versions
-const fromEntries = <K extends string, V>(entries: (readonly [K, V])[]) =>
-  entries.reduce((acc, [k, v]) => {
-    if (acc.hasOwnProperty(k)) {
-      throw new Error(`A value for key '${k}' already exists in the object.`);
-    }
-
-    acc[k] = v;
-    return acc;
-  }, {} as Record<K, V>);
-
 const getParamName = (pattern: string) =>
   pattern.replace(/^:/, '').replace(/\?$/, '');
 
@@ -257,8 +247,7 @@ const joinPaths = (...paths: string[]): string =>
     .join('/');
 
 const createConfigItem = (
-  legacy: boolean,
-  config: PathConfig | string,
+  config: PathConfig<object> | string,
   parentPattern?: string
 ): ConfigItem => {
   if (typeof config === 'string') {
@@ -272,26 +261,19 @@ const createConfigItem = (
   // It can have `path` property and `screens` prop which has nested configs
   let pattern: string | undefined;
 
-  if (legacy) {
-    pattern =
-      config.exact !== true && parentPattern && config.path
-        ? joinPaths(parentPattern, config.path)
-        : config.path;
-  } else {
-    if (config.exact && config.path === undefined) {
-      throw new Error(
-        "A 'path' needs to be specified when specifying 'exact: true'. If you don't want this screen in the URL, specify it as empty string, e.g. `path: ''`."
-      );
-    }
-
-    pattern =
-      config.exact !== true
-        ? joinPaths(parentPattern || '', config.path || '')
-        : config.path || '';
+  if (config.exact && config.path === undefined) {
+    throw new Error(
+      "A 'path' needs to be specified when specifying 'exact: true'. If you don't want this screen in the URL, specify it as empty string, e.g. `path: ''`."
+    );
   }
 
+  pattern =
+    config.exact !== true
+      ? joinPaths(parentPattern || '', config.path || '')
+      : config.path || '';
+
   const screens = config.screens
-    ? createNormalizedConfigs(legacy, config.screens, pattern)
+    ? createNormalizedConfigs(config.screens, pattern)
     : undefined;
 
   return {
@@ -303,13 +285,12 @@ const createConfigItem = (
 };
 
 const createNormalizedConfigs = (
-  legacy: boolean,
-  options: PathConfigMap,
+  options: PathConfigMap<object>,
   pattern?: string
 ): Record<string, ConfigItem> =>
   fromEntries(
     Object.entries(options).map(([name, c]) => {
-      const result = createConfigItem(legacy, c, pattern);
+      const result = createConfigItem(c, pattern);
 
       return [name, result];
     })

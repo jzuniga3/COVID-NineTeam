@@ -1,56 +1,41 @@
-import * as React from 'react';
 import {
   CommonActions,
-  Route,
-  NavigationState,
   InitialState,
-  PartialState,
   NavigationAction,
+  NavigationState,
+  ParamListBase,
+  PartialState,
+  Route,
 } from '@react-navigation/routers';
-import EnsureSingleNavigator from './EnsureSingleNavigator';
-import UnhandledActionContext from './UnhandledActionContext';
-import NavigationBuilderContext from './NavigationBuilderContext';
-import NavigationStateContext from './NavigationStateContext';
-import NavigationRouteContext from './NavigationRouteContext';
-import NavigationContext from './NavigationContext';
-import { ScheduleUpdateContext } from './useScheduleUpdate';
-import useChildListeners from './useChildListeners';
-import useKeyedChildListeners from './useKeyedChildListeners';
-import useOptionsGetters from './useOptionsGetters';
-import useEventEmitter from './useEventEmitter';
-import useSyncState from './useSyncState';
+import * as React from 'react';
+
+import checkDuplicateRouteNames from './checkDuplicateRouteNames';
 import checkSerializable from './checkSerializable';
+import { NOT_INITIALIZED_ERROR } from './createNavigationContainerRef';
+import EnsureSingleNavigator from './EnsureSingleNavigator';
+import findFocusedRoute from './findFocusedRoute';
+import NavigationBuilderContext from './NavigationBuilderContext';
+import NavigationContainerRefContext from './NavigationContainerRefContext';
+import NavigationContext from './NavigationContext';
+import NavigationRouteContext from './NavigationRouteContext';
+import NavigationStateContext from './NavigationStateContext';
 import type {
   NavigationContainerEventMap,
-  NavigationContainerRef,
   NavigationContainerProps,
+  NavigationContainerRef,
 } from './types';
+import UnhandledActionContext from './UnhandledActionContext';
+import useChildListeners from './useChildListeners';
+import useEventEmitter from './useEventEmitter';
+import useKeyedChildListeners from './useKeyedChildListeners';
+import useOptionsGetters from './useOptionsGetters';
+import { ScheduleUpdateContext } from './useScheduleUpdate';
+import useSyncState from './useSyncState';
 
 type State = NavigationState | PartialState<NavigationState> | undefined;
 
-const NOT_INITIALIZED_ERROR =
-  "The 'navigation' object hasn't been initialized yet. This might happen if you don't have a navigator mounted, or if the navigator hasn't finished mounting. See https://reactnavigation.org/docs/navigating-without-navigation-prop#handling-initialization for more details.";
-
 const serializableWarnings: string[] = [];
-
-try {
-  /**
-   * Migration instructions for removal of devtools from core
-   */
-  Object.defineProperty(
-    global,
-    'REACT_NAVIGATION_REDUX_DEVTOOLS_EXTENSION_INTEGRATION_ENABLED',
-    {
-      set(_) {
-        console.warn(
-          "Redux devtools extension integration can be enabled with the '@react-navigation/devtools' package. For more details, see https://reactnavigation.org/docs/devtools"
-        );
-      },
-    }
-  );
-} catch (e) {
-  // Ignore
-}
+const duplicateNameWarnings: string[] = [];
 
 /**
  * Remove `key` and `routeNames` from the state objects recursively to get partial state.
@@ -100,25 +85,20 @@ const BaseNavigationContainer = React.forwardRef(
       independent,
       children,
     }: NavigationContainerProps,
-    ref?: React.Ref<NavigationContainerRef>
+    ref?: React.Ref<NavigationContainerRef<ParamListBase>>
   ) {
     const parent = React.useContext(NavigationStateContext);
 
     if (!parent.isDefault && !independent) {
       throw new Error(
-        "Looks like you have nested a 'NavigationContainer' inside another. Normally you need only one container at the root of the app, so this was probably an error. If this was intentional, pass 'independent={true}' explicitely. Note that this will make the child navigators disconnected from the parent and you won't be able to navigate between them."
+        "Looks like you have nested a 'NavigationContainer' inside another. Normally you need only one container at the root of the app, so this was probably an error. If this was intentional, pass 'independent={true}' explicitly. Note that this will make the child navigators disconnected from the parent and you won't be able to navigate between them."
       );
     }
 
-    const [
-      state,
-      getState,
-      setState,
-      scheduleUpdate,
-      flushUpdates,
-    ] = useSyncState<State>(() =>
-      getPartialState(initialState == null ? undefined : initialState)
-    );
+    const [state, getState, setState, scheduleUpdate, flushUpdates] =
+      useSyncState<State>(() =>
+        getPartialState(initialState == null ? undefined : initialState)
+      );
 
     const isFirstMountRef = React.useRef<boolean>(true);
 
@@ -134,17 +114,22 @@ const BaseNavigationContainer = React.forwardRef(
 
     const { keyedListeners, addKeyedListener } = useKeyedChildListeners();
 
-    const dispatch = (
-      action: NavigationAction | ((state: NavigationState) => NavigationAction)
-    ) => {
-      if (listeners.focus[0] == null) {
-        throw new Error(NOT_INITIALIZED_ERROR);
-      }
+    const dispatch = React.useCallback(
+      (
+        action:
+          | NavigationAction
+          | ((state: NavigationState) => NavigationAction)
+      ) => {
+        if (listeners.focus[0] == null) {
+          console.error(NOT_INITIALIZED_ERROR);
+        } else {
+          listeners.focus[0]((navigation) => navigation.dispatch(action));
+        }
+      },
+      [listeners.focus]
+    );
 
-      listeners.focus[0]((navigation) => navigation.dispatch(action));
-    };
-
-    const canGoBack = () => {
+    const canGoBack = React.useCallback(() => {
       if (listeners.focus[0] == null) {
         return false;
       }
@@ -158,22 +143,22 @@ const BaseNavigationContainer = React.forwardRef(
       } else {
         return false;
       }
-    };
+    }, [listeners.focus]);
 
     const resetRoot = React.useCallback(
       (state?: PartialState<NavigationState> | NavigationState) => {
         const target = state?.key ?? keyedListeners.getState.root?.().key;
 
         if (target == null) {
-          throw new Error(NOT_INITIALIZED_ERROR);
+          console.error(NOT_INITIALIZED_ERROR);
+        } else {
+          listeners.focus[0]((navigation) =>
+            navigation.dispatch({
+              ...CommonActions.reset(state),
+              target,
+            })
+          );
         }
-
-        listeners.focus[0]((navigation) =>
-          navigation.dispatch({
-            ...CommonActions.reset(state),
-            target,
-          })
-        );
       },
       [keyedListeners.getState, listeners.focus]
     );
@@ -183,47 +168,60 @@ const BaseNavigationContainer = React.forwardRef(
     }, [keyedListeners.getState]);
 
     const getCurrentRoute = React.useCallback(() => {
-      let state = getRootState();
-      if (state === undefined) {
+      const state = getRootState();
+
+      if (state == null) {
         return undefined;
       }
-      while (state.routes[state.index].state !== undefined) {
-        state = state.routes[state.index].state as NavigationState;
-      }
-      return state.routes[state.index];
+
+      const route = findFocusedRoute(state);
+
+      return route as Route<string> | undefined;
     }, [getRootState]);
 
     const emitter = useEventEmitter<NavigationContainerEventMap>();
 
     const { addOptionsGetter, getCurrentOptions } = useOptionsGetters({});
 
-    React.useImperativeHandle(ref, () => ({
-      ...(Object.keys(CommonActions) as (keyof typeof CommonActions)[]).reduce<
-        any
-      >((acc, name) => {
-        acc[name] = (...args: any[]) =>
-          dispatch(
-            CommonActions[name](
-              // @ts-expect-error: we can't know the type statically
-              ...args
-            )
-          );
-        return acc;
-      }, {}),
-      ...emitter.create('root'),
-      resetRoot,
-      dispatch,
-      canGoBack,
-      getRootState,
-      dangerouslyGetState: () => state,
-      dangerouslyGetParent: () => undefined,
-      getCurrentRoute,
-      getCurrentOptions,
-    }));
+    const navigation: NavigationContainerRef<ParamListBase> = React.useMemo(
+      () => ({
+        ...Object.keys(CommonActions).reduce<any>((acc, name) => {
+          acc[name] = (...args: any[]) =>
+            // @ts-expect-error: this is ok
+            dispatch(CommonActions[name](...args));
+          return acc;
+        }, {}),
+        ...emitter.create('root'),
+        resetRoot,
+        dispatch,
+        canGoBack,
+        getRootState,
+        getState: () => stateRef.current,
+        getParent: () => undefined,
+        getCurrentRoute,
+        getCurrentOptions,
+        isReady: () => listeners.focus[0] != null,
+      }),
+      [
+        canGoBack,
+        dispatch,
+        emitter,
+        getCurrentOptions,
+        getCurrentRoute,
+        getRootState,
+        listeners.focus,
+        resetRoot,
+      ]
+    );
+
+    React.useImperativeHandle(ref, () => navigation, [navigation]);
 
     const onDispatchAction = React.useCallback(
       (action: NavigationAction, noop: boolean) => {
-        emitter.emit({ type: '__unsafe_action__', data: { action, noop } });
+        emitter.emit({
+          type: '__unsafe_action__',
+          data: { action, noop, stack: stackRef.current },
+        });
       },
       [emitter]
     );
@@ -246,12 +244,15 @@ const BaseNavigationContainer = React.forwardRef(
       [emitter]
     );
 
+    const stackRef = React.useRef<string | undefined>();
+
     const builderContext = React.useMemo(
       () => ({
         addListener,
         addKeyedListener,
         onDispatchAction,
         onOptionsChange,
+        stackRef,
       }),
       [addListener, addKeyedListener, onDispatchAction, onOptionsChange]
     );
@@ -287,22 +288,26 @@ const BaseNavigationContainer = React.forwardRef(
     );
 
     const onStateChangeRef = React.useRef(onStateChange);
+    const stateRef = React.useRef(state);
 
     React.useEffect(() => {
       isInitialRef.current = false;
       onStateChangeRef.current = onStateChange;
+      stateRef.current = state;
     });
 
     React.useEffect(() => {
-      if (process.env.NODE_ENV !== 'production') {
-        if (state !== undefined) {
-          const result = checkSerializable(state);
+      const hydratedState = getRootState();
 
-          if (!result.serializable) {
-            const { location, reason } = result;
+      if (process.env.NODE_ENV !== 'production') {
+        if (hydratedState !== undefined) {
+          const serializableResult = checkSerializable(hydratedState);
+
+          if (!serializableResult.serializable) {
+            const { location, reason } = serializableResult;
 
             let path = '';
-            let pointer: Record<any, any> = state;
+            let pointer: Record<any, any> = hydratedState;
             let params = false;
 
             for (let i = 0; i < location.length; i++) {
@@ -344,13 +349,27 @@ const BaseNavigationContainer = React.forwardRef(
               console.warn(message);
             }
           }
+
+          const duplicateRouteNamesResult =
+            checkDuplicateRouteNames(hydratedState);
+
+          if (duplicateRouteNamesResult.length) {
+            const message = `Found screens with the same name nested inside one another. Check:\n${duplicateRouteNamesResult.map(
+              (locations) => `\n${locations.join(', ')}`
+            )}\n\nThis can cause confusing behavior during navigation. Consider using unique names for each screen instead.`;
+
+            if (!duplicateNameWarnings.includes(message)) {
+              duplicateNameWarnings.push(message);
+              console.warn(message);
+            }
+          }
         }
       }
 
       emitter.emit({ type: 'state', data: { state } });
 
       if (!isFirstMountRef.current && onStateChangeRef.current) {
-        onStateChangeRef.current(getRootState());
+        onStateChangeRef.current(hydratedState);
       }
 
       isFirstMountRef.current = false;
@@ -400,17 +419,19 @@ const BaseNavigationContainer = React.forwardRef(
     );
 
     let element = (
-      <ScheduleUpdateContext.Provider value={scheduleContext}>
-        <NavigationBuilderContext.Provider value={builderContext}>
-          <NavigationStateContext.Provider value={context}>
-            <UnhandledActionContext.Provider
-              value={onUnhandledAction ?? defaultOnUnhandledAction}
-            >
-              <EnsureSingleNavigator>{children}</EnsureSingleNavigator>
-            </UnhandledActionContext.Provider>
-          </NavigationStateContext.Provider>
-        </NavigationBuilderContext.Provider>
-      </ScheduleUpdateContext.Provider>
+      <NavigationContainerRefContext.Provider value={navigation}>
+        <ScheduleUpdateContext.Provider value={scheduleContext}>
+          <NavigationBuilderContext.Provider value={builderContext}>
+            <NavigationStateContext.Provider value={context}>
+              <UnhandledActionContext.Provider
+                value={onUnhandledAction ?? defaultOnUnhandledAction}
+              >
+                <EnsureSingleNavigator>{children}</EnsureSingleNavigator>
+              </UnhandledActionContext.Provider>
+            </NavigationStateContext.Provider>
+          </NavigationBuilderContext.Provider>
+        </ScheduleUpdateContext.Provider>
+      </NavigationContainerRefContext.Provider>
     );
 
     if (independent) {

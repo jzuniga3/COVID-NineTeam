@@ -1,11 +1,7 @@
-const NOOP = () => {
-  // noop
-};
-
 export default {
-  configureProps: NOOP,
-  connectNodes: NOOP,
+  configureProps: () => {},
+  connectNodes: () => {},
   getValue: () => 0,
-  disconnectNodes: NOOP,
-  createNode: NOOP,
+  disconnectNodes: () => {},
+  createNode: () => {},
 };
