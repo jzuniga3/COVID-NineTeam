@@ -1,20 +1,19 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  StyleSheet,
-  Platform,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-  GestureResponderEvent,
-} from 'react-native';
 import { Link, Route, useTheme } from '@react-navigation/native';
 import Color from 'color';
+import React from 'react';
+import {
+  GestureResponderEvent,
+  Platform,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  ViewStyle,
+} from 'react-native';
 
-import TabBarIcon from './TabBarIcon';
 import type { BottomTabBarButtonProps, LabelPosition } from '../types';
+import TabBarIcon from './TabBarIcon';
 
 type Props = {
   /**
@@ -38,7 +37,7 @@ type Props = {
   /**
    * Icon to display for the tab.
    */
-  icon?: (props: {
+  icon: (props: {
     focused: boolean;
     size: number;
     color: string;
@@ -159,13 +158,14 @@ export default function BottomTabBarItem({
       );
     } else {
       return (
-        <TouchableWithoutFeedback
+        <Pressable
           {...rest}
           accessibilityRole={accessibilityRole}
           onPress={onPress}
+          style={style}
         >
-          <View style={style}>{children}</View>
-        </TouchableWithoutFeedback>
+          {children}
+        </Pressable>
       );
     }
   },
@@ -263,7 +263,8 @@ export default function BottomTabBarItem({
     onLongPress,
     testID,
     accessibilityLabel,
-    accessibilityRole: 'button',
+    // FIXME: accessibilityRole: 'tab' doesn't seem to work as expected on iOS
+    accessibilityRole: Platform.select({ ios: 'button', default: 'tab' }),
     accessibilityState: { selected: focused },
     // @ts-expect-error: keep for compatibility with older React Native versions
     accessibilityStates: focused ? ['selected'] : [],
