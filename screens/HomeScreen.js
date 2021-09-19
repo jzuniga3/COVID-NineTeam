@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {Text, View, TouchableOpacity} from "react-native";
-import {BarcodeScanner} from "./BarcodeScanner";
+import {BarcodeScanner} from "../components/BarcodeScanner";
 
 export default function HomeScreen() {
 
