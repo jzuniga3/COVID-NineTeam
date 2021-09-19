@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0873ddc4-dec9-4e63-a86f-68922f573a3d" name="Default Changelist" comment="addes profile screen!">
+      <change beforePath="$PROJECT_DIR$/.expo/packager-info.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/packager-info.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.expo/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.expo/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Default_Changelist_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Default_Changelist_1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/ProfileScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/ProfileScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +116,8 @@
       <workItem from="1618972872379" duration="538000" />
       <workItem from="1619131614559" duration="6799000" />
       <workItem from="1619140884734" duration="2139000" />
+      <workItem from="1632056275651" duration="43000" />
+      <workItem from="1632056572986" duration="314000" />
     </task>
     <task id="LOCAL-00001" summary="fixed navigation and log out">
       <created>1616114164304</created>
