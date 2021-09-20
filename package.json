@@ -8,7 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@react-firebase/database": "^0.3.11",
+    "@react-firebase/database": "^0.2.10",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "1.16.1",
     "@react-navigation/bottom-tabs": "^6.0.5",
@@ -16,8 +16,9 @@
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/native-stack": "^6.1.0",
     "@react-navigation/stack": "^6.0.7",
-    "expo": "^42.0.3",
+    "expo": "^42.0.0",
     "expo-barcode-scanner": "~10.2.2",
+    "expo-cli": "^4.11.0",
     "expo-permissions": "~12.1.1",
     "expo-status-bar": "~1.0.4",
     "firebase": "8.2.3",
@@ -29,7 +30,8 @@
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
-    "react-native-web": "~0.13.12",
+    "react-native-vector-icons": "^8.1.0",
+    "react-native-web": "^0.17.1",
     "react-redux": "^7.2.5",
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0"

@@ -90,7 +90,11 @@ export default class App extends Component {
     return(
       // must be inside provider to allow redux to work
       <Provider store={store}>
-        <MainScreen/>
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Main">
+            <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false}}/>
+          </Stack.Navigator>
+        </NavigationContainer>
       </Provider>
     
     )
