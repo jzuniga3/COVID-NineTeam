@@ -9,6 +9,7 @@ export default class Register extends Component {
         super(props)
 
         this.state = {
+            name: '',
             email: '',
             password: ''
         }
@@ -17,9 +18,15 @@ export default class Register extends Component {
 
     //TODO: process codes for errors and display to user
     onSignUp() {
-        const { email, password } = this.state;
+        const { name, email, password } = this.state;
         firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((result) => {
+            firebase.firestore().collection("users")
+            .doc(firebase.auth().currentUser.uid)
+            .set({
+                name,
+                email
+            })
             console.log(result)
         })
         .catch((error) => {
@@ -31,6 +38,10 @@ export default class Register extends Component {
     render() {
         return (
             <View>
+                <TextInput
+                    placeholder="name"
+                    onChangeText={name => this.setState({ name })}
+                />
                 <TextInput
                     placeholder="email"
                     onChangeText={email => this.setState({ email })}
