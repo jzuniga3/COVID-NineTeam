@@ -16,7 +16,7 @@ const store = createStore(rootReducer, applyMiddleware(thunk))
 
 import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register';
-import MainScreen, { Main } from './components/Main';
+import MainScreen from './components/Main';
 
 
 const firebaseConfig = {
