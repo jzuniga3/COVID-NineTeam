@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   fixedRatio: {
     flex: 1,
-    aspectRatio: 1
+    aspectRatio: 2 / 3
   }
 
 })
