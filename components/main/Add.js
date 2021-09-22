@@ -50,8 +50,9 @@ export default function Add({ navigation }) {
   if (hasCameraPermission === false || hasGalleryPermission === false) {
     return <Text>No access to camera</Text>;
   }
+  
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, justifyContent: 'space-evenly' }}>
       <View style={styles.cameraContainer}>
         <Camera
           ref={ref => setCamera(ref)}
@@ -59,9 +60,13 @@ export default function Add({ navigation }) {
           type={type}
           ratio={'1:1'} />
       </View>
-
+      
+      <View style={{ flex: 1, flexDirection:'row', justifyContent: 'space-around', 
+      // change this back to flex eventually
+      position: 'absolute', bottom: 0, marginLeft: 40, marginBottom: 10 }}>
       <Button
         title="Flip Image"
+        
         onPress={() => {
           setType(
             type === Camera.Constants.Type.back
@@ -73,7 +78,8 @@ export default function Add({ navigation }) {
 
       <Button title="Take Picture" onPress={() => takePicture()}/>
       <Button title="From Gallery" onPress={() => pickImage()}/>
-      {image && <Image source={{uri: image}} style={{flex: 1}}/>}
+      </View>
+      {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
     </View>
   );
 }
@@ -81,7 +87,7 @@ export default function Add({ navigation }) {
 const styles = StyleSheet.create({
   cameraContainer: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   fixedRatio: {
     flex: 1,
