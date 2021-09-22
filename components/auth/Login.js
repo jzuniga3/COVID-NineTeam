@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Button, TextInput } from 'react-native'
 
-import firebase from 'firebase'
+import fire from '../fire'
 
 export default class Login extends Component {
 
@@ -18,7 +18,7 @@ export default class Login extends Component {
     //TODO: process codes for errors and display to user
     onSignUp() {
         const { email, password } = this.state;
-        firebase.auth().signInWithEmailAndPassword(email, password)
+        fire.auth().signInWithEmailAndPassword(email, password)
         .then((result) => {
             console.log(result)
         })

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Button, TextInput } from 'react-native'
 
-import firebase from 'firebase'
+import fire from '../fire'
 
 export default class Register extends Component {
 
@@ -19,10 +19,10 @@ export default class Register extends Component {
     //TODO: process codes for errors and display to user
     onSignUp() {
         const { name, email, password } = this.state;
-        firebase.auth().createUserWithEmailAndPassword(email, password)
+        fire.auth().createUserWithEmailAndPassword(email, password)
         .then((result) => {
-            firebase.firestore().collection("users")
-            .doc(firebase.auth().currentUser.uid)
+            fire.firestore().collection("users")
+            .doc(fire.auth().currentUser.uid)
             .set({
                 name,
                 email
