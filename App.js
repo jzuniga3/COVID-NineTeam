@@ -6,7 +6,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import firebase from 'firebase'
+import fire from './components/fire';
 
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -18,24 +18,6 @@ import LandingScreen from './components/auth/Landing'
 import RegisterScreen from './components/auth/Register';
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
-
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBn-HXdCwAxePnognFZ9-4nWpNrJYYfCG8",
-  authDomain: "weightexchangeapp.firebaseapp.com",
-  databaseURL: "https://weightexchangeapp-default-rtdb.firebaseio.com",
-  projectId: "weightexchangeapp",
-  storageBucket: "weightexchangeapp.appspot.com",
-  messagingSenderId: "1086264875488",
-  appId: "1:1086264875488:web:758ac029a2426b092eb385",
-  measurementId: "G-ZT4PY1KNGK"
-};
-
-// if firebase is not loaded initialize it
-if(firebase.apps.length === 0) {
-  firebase.initializeApp(firebaseConfig)
-}
 
 // Stack to handle navigation
 const Stack = createStackNavigator();
@@ -50,7 +32,7 @@ export default class App extends Component {
 
   // check whether user is logged in
   componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
+    fire.auth().onAuthStateChanged((user) => {
       if(!user) {
         this.setState({
           loggedIn: false,
