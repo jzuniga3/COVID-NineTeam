@@ -12,11 +12,11 @@ export default class Login extends Component {
             email: '',
             password: ''
         }
-        this.onSignUp = this.onSignUp.bind(this)
+        this.onSignIn = this.onSignIn.bind(this)
     }
 
     //TODO: process codes for errors and display to user
-    onSignUp() {
+    onSignIn() {
         const { email, password } = this.state;
         fire.auth().signInWithEmailAndPassword(email, password)
         .then((result) => {
@@ -41,7 +41,7 @@ export default class Login extends Component {
                     onChangeText={password => this.setState({ password })}
                 />
                 <Button
-                    onPress={() => this.onSignUp()}
+                    onPress={() => this.onSignIn()}
                     title="Sign In"
                 />
             </View>
