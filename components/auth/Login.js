@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Button, TextInput } from 'react-native'
+import { View, Button, TextInput, Image } from 'react-native'
 
 import fire from '../fire'
 
@@ -30,21 +30,59 @@ export default class Login extends Component {
 
     render() {
         return (
-            <View>
-                <TextInput
-                    placeholder="email"
-                    onChangeText={email => this.setState({ email })}
-                />
-                <TextInput
-                    placeholder="password"
-                    secureTextEntry={ true }
-                    onChangeText={password => this.setState({ password })}
-                />
-                <Button
-                    onPress={() => this.onSignIn()}
-                    title="Sign In"
-                />
+            <View style = {{height: 680, backgroundColor: "#192879"}}>
+                <View style = {styles.loginPrompt}>
+                <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
+                    <View>
+                        <TextInput
+                            style = {styles.inputLabel}
+                            placeholder="email"
+                            onChangeText={email => this.setState({ email })}
+                        />
+                        <TextInput
+                            style = {styles.inputLabel}
+                            placeholder="password"
+                            secureTextEntry={ true }
+                            onChangeText={password => this.setState({ password })}
+                        />
+                        <Button
+                            onPress={() => this.onSignIn()}
+                            title="Sign In"
+                        />
+                    </View>
+                </View>
             </View>
         )
+    }
+}
+
+const styles = 
+{
+    loginPrompt:
+    {
+        marginTop: 30,
+        marginLeft: 24,
+        marginRight: 24,
+        marginBottom: 70,
+    },
+    loginImage:
+    {
+        width: 250,
+        height: 250,
+        marginLeft: 20,
+        marginTop: 30,
+        marginBottom: 30,
+    },
+    inputLabel:
+    {
+        width: 280,
+        height: 45,
+        borderColor: "#43519D",
+        backgroundColor: "#FFFFFF"
+    },
+    userLabel:
+    {
+        fontSize: 20,
+        color: "#414E93"
     }
 }

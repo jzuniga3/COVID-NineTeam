@@ -73,10 +73,10 @@ const SignUp =(props)=>{
         <View style={{height:40, width:"70%", backgroundColor: 'white', padding:10, marginBottom:15, borderColor:'black', borderWidth:2}}>
             <RNPickerSelect
                 onValueChange={setSex}
-                placeholder={{label:'Select your sex...', value: null, color: 'blue'}}
+                placeholder={{label:'Select your sex...', value: null, color: '#FFFFFF'}}
                 items ={[
-                    {label: 'Male', value: 'male'},
-                    {label: 'Female', value: 'female'},
+                    {label: 'Male', value: 'male', color: "#FFFFFF"},
+                    {label: 'Female', value: 'female', color: "#FFFFFF"},
                 ]}/>
         </View>
 
