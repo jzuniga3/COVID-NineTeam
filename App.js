@@ -66,7 +66,7 @@ export default class App extends Component {
       <NavigationContainer>
       <Stack.Navigator initialRouteName="Landing">
         <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false}}/>
-        <Stack.Screen name="Register" component={RegisterScreen}/>
+        <Stack.Screen name="Register" component={RegisterScreen} options={{ headerStyle: {}}}/>
         <Stack.Screen name="Login" component={LoginScreen}/>
       </Stack.Navigator>
     </NavigationContainer>

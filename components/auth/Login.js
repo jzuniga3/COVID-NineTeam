@@ -30,7 +30,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <View style = {{height: 680, backgroundColor: "#192879"}}>
+            <View style = {styles.contentCenter}>
                 <View style = {styles.loginPrompt}>
                 <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
                     <View>
@@ -84,5 +84,11 @@ const styles =
     {
         fontSize: 20,
         color: "#414E93"
+    },
+    contentCenter:
+    {
+        height: '100%',
+        backgroundColor: "#192879",
+        alignItems: 'center'
     }
 }

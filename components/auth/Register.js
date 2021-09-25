@@ -1,3 +1,4 @@
+import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react'
 import { View, Button, TextInput, Image } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
@@ -103,7 +104,8 @@ export default class Register extends Component {
         if (currentView == 1)
         {
             return (
-                <View style = {{height: 680, backgroundColor: "#192879"}}>
+                <View style = {styles.contentCenter}>
+                <StatusBar backgroundColor='blue' barStyle='light-content' />
                 <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
                     <View style = {styles.loginPrompt}>      
                         <TextInput
@@ -139,7 +141,7 @@ export default class Register extends Component {
         else if (currentView == 2)
         {
             return (
-                <View style = {{height: 680, backgroundColor: "#192879"}}>
+                <View style = {styles.contentCenter}>
                 <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
                     <View style = {styles.loginPrompt}>      
                         <TextInput
@@ -197,7 +199,7 @@ const styles =
         marginTop: 30,
         marginLeft: 24,
         marginRight: 24,
-        marginBottom: 70,
+        marginBottom: 70
     },
     loginImage:
     {
@@ -219,4 +221,10 @@ const styles =
         fontSize: 20,
         color: "#414E93"
     },
+    contentCenter:
+    {
+        height: '100%',
+        backgroundColor: "#192879",
+        alignItems: 'center'
+    }
 }
