@@ -10,7 +10,8 @@ export default class Register extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {
+        this.state = 
+        {
             name: '',
             email: '',
             password: '',
@@ -65,31 +66,45 @@ export default class Register extends Component {
     validateNumbers = () =>
     {
         const { name, sex, age, feet, inches, weight } = this.state;
+        var errorMsg = 'Invalid fields:';
+        var isError = false;
 
-        //Check if any values are empty
-        if (name == '' || sex == '' || age == '' || feet == '' || inches == '' || weight == '')
+        //Check if name is empty
+        if (name == '')
         {
-            alert("Fill out all fields.");
+            errorMsg += '\nName';
+            isError = true;
         }
-        //Check if number values are not numbers
-        else if (isNaN(age) || isNaN(feet) || isNaN(inches) || isNaN(weight))
+        //Check if sex is empty
+        if (sex == '' || sex == 'Select your sex...')
         {
-            alert("Some of your responses are invalid.");
+            errorMsg += '\nSex';
+            isError = true;
         }
         //Check if age is valid
-        else if (age < 1 || age > 120)
+        if (age == '' || isNaN(age) || age < 1 || age > 120)
         {
-            alert("Enter a valid age.");
+            errorMsg += '\nAge';
+            isError = true;
         }
         //Check if height is valid
-        else if (inches < 0 || inches > 11 || feet < 0 || feet > 10)
+        if (inches == '' || isNaN(inches) || inches < 0 || inches > 11 || feet == '' || isNaN(feet) || feet < 0 || feet > 10)
         {
-            alert("Enter a valid height.");
+            errorMsg += '\nHeight';
+            isError = true;
         }
         //Check if weight is valid
-        else if (weight < 0 || weight > 1500)
+        if (weight == '' || isNaN(weight) || weight < 0 || weight > 1500)
         {
-            alert("Enter a valid weight.");
+            errorMsg += '\nWeight';
+            isError = true;
+        }
+
+        //If an error was detected.
+        if (isError == true)
+        {
+            alert(errorMsg);
+            isError = false;
         }
         //If everything is valid
         else
