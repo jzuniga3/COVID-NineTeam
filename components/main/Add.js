@@ -21,6 +21,12 @@ export default function Add({ navigation }) {
     })();
   }, []);
 
+  useEffect(() => {
+    if(image != null) {
+      navigation.navigate('Save', {image});
+    }
+  }, [image])
+
   const takePicture = async () => {
       if(camera) {
           const data = await camera.takePictureAsync(null);
@@ -78,6 +84,7 @@ export default function Add({ navigation }) {
 
       <Button title="Take Picture" onPress={() => takePicture()}/>
       <Button title="From Gallery" onPress={() => pickImage()}/>
+      {/* <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/> */}
       </View>
       {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
     </View>

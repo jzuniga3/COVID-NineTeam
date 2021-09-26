@@ -151,7 +151,7 @@ export default class Register extends Component {
                             onChangeText={name => this.setState({ name })}
                         />
                         <RNPickerSelect
-                            placeholder = {{label:'Select your sex...', value: null}}
+                            placeholder = {{label:'Select your sex...', value: ''}}
                             items = {[{label: 'Male', value: 'male'}, {label: 'Female', value: 'female'}]}
                             onValueChange={sex => this.setState({ sex })}
                         />
