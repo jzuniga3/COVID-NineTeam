@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, LogBox } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -30,6 +30,7 @@ export default class App extends Component {
     this.state = {
       loaded: false
     }
+    LogBox.ignoreLogs(['Setting a timer']);
   }
 
   // check whether user is logged in
