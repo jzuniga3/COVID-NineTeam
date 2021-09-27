@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import fire from '../fire'
-import {Text, View, TouchableOpacity} from 'react-native'
+import {Text, View, Button, TextInput} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const handleLogout = () => 
@@ -8,60 +8,97 @@ const handleLogout = () =>
     fire.auth().signOut()
 }
 
-//editProfile = (profile) => 
-//{
-//    return this.db
-//        .collection("users")
-//        .doc(this.auth.currentUser.uid)
-//        .set(profile)
-//        .catch((error) => console.error("Error: ", error));
-//}
-
-
 export default function Profile()
 {    
     const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
     const [sex, setSex] = useState("");
     const [age, setAge] = useState(-1);
     const [weight, setWeight] = useState(-1);
     const [feet, setFeet] = useState(-1);
     const [inches, setInches] = useState(-1);
 
-    //Get user information from firestore
-    fire.firestore().collection('users').get().then((snapshot) => {
-        snapshot.docs.forEach(doc => {
-            setName(doc.data().name)
-            setEmail(doc.data().email)
-            setSex(doc.data().sex)
-            setAge(doc.data().age)
-            setWeight(doc.data().weight)
-            setFeet(doc.data().feet)
-            setInches(doc.data().inches)
-        })
-    })
-
+    const usersDB = fire.firestore().collection('users')
+    const userID = fire.auth().currentUser.uid
+    
     let totalHeight = (feet*12) + inches*1;
     const BMI = (weight/(totalHeight*totalHeight)*703).toFixed(2);
+
+    const onChangePasswordPress = () =>
+    {
+        usersDB.doc(userID).update({
+            name: {name},
+            age: {age},
+            feet: {feet},
+            inches: {inches},
+            weight: {weight}
+        })
+    }
+
+    //Get user information from firestore
+    usersDB.doc(userID).get().then((doc) => {
+        setName(doc.data().name)
+        setSex(doc.data().sex)
+        setAge(doc.data().age)
+        setWeight(doc.data().weight)
+        setFeet(doc.data().feet)
+        setInches(doc.data().inches)
+    })
 
     return (
         <SafeAreaView style = {styles.contentCenter}>
             <Text>Profile</Text>
             <View style = {styles.profileScreen}>
 
-                <Text>Name: {name}</Text>
-                <Text>Email: {email}</Text>
-                <Text>Age: {age}</Text>
-                <Text>Sex: {sex}</Text>
-                <Text>Height: {feet}' {inches}"</Text>
-                <Text>Weight: {weight} lbs</Text>
-                <Text>{`\n`}</Text>
-                <Text>BMI: {BMI}</Text>
+                <View style = {styles.profileRow}>
+                <Text style = {styles.profileData}>Name:  </Text><TextInput 
+                    style = {styles.profileData}
+                    placeholder = {name}
+                    onChangeText = {newName => setName({newName})}
+                />
+                </View>
+
+                <View style = {styles.profileRow}>
+                <Text style = {styles.profileData}>Age:  </Text><TextInput 
+                    style = {styles.profileData}
+                    placeholder = {age}
+                    onChangeText = {newAge => setAge({newAge})}
+                />
+                </View>
+
+                <View style = {styles.profileRow}>
+                <Text style = {styles.profileData}>Height:  </Text><TextInput 
+                    style = {styles.heightInput}
+                    placeholder = {feet}
+                    onChangeText = {newFeet => setFeet({newFeet})}
+                />
+                <Text style = {styles.profileData}>'  </Text><TextInput 
+                    style = {styles.heightInput}
+                    placeholder = {inches}
+                    onChangeText = {newInches => setInches({newInches})}
+                />
+                <Text style = {styles.profileData}>"</Text>
+                </View>
+
+                <View style = {styles.profileRow}>
+                <Text style = {styles.profileData}>Weight:  </Text><TextInput 
+                    style = {styles.weightInput}
+                    placeholder = {weight}
+                    onChangeText = {newWeight => setWeight({newWeight})}
+                />
+                <Text style = {styles.profileData}> lbs</Text>
+                </View>
+
+                <Text style = {styles.profileData}>BMI: {BMI}</Text>
                 <Text>{`\n\n`}</Text>
 
-                <TouchableOpacity onPress = {handleLogout}>
-                    <Text>Logout</Text>
-                </TouchableOpacity>
+                <Button
+                    title = 'Save changes'
+                    onPress = {onChangePasswordPress}
+                />
+                <Button
+                    onPress = {handleLogout}
+                    title = 'Logout'
+                />
             </View>
         </SafeAreaView>
     );
@@ -80,5 +117,23 @@ const styles =
         height: '80%',
         width: '80%',
         backgroundColor: "#FFFFFF"
+    },
+    profileData:
+    {
+        fontSize: 20,
+    },
+    profileRow:
+    {
+        flexDirection: 'row',
+    },
+    heightInput:
+    {
+        fontSize: 20,
+        width: 25
+    },
+    weightInput:
+    {
+        fontSize: 20,
+        width: 40
     }
 }
