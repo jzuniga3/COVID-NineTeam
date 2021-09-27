@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 import fire from '../fire'
-import {Text, View, Button, TextInput} from 'react-native'
+import { Text, View, Button, TextInput, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const handleLogout = () => 
@@ -18,11 +18,25 @@ export default function Profile()
     const [feet, setFeet] = useState(-1);
     const [inches, setInches] = useState(-1);
 
+    const [profilePic, setProfilePic] = useState("");
+    const storage = fire.storage().ref();
+
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
     
     let totalHeight = (feet*12) + inches*1;
     const BMI = (weight/(totalHeight*totalHeight)*703).toFixed(2);
+
+    var childPath = `image/${fire.auth().currentUser.uid}/profilePicture.jpeg`;
+
+    if(childPath != undefined) {
+        storage.child(childPath).getDownloadURL().then((url) => {
+            setProfilePic(url);
+            console.log(url);
+          })
+    } else {
+        console.log('child path is not defined...')
+    }
 
     const onChangePasswordPress = () =>
     {
@@ -31,7 +45,8 @@ export default function Profile()
             age: {age},
             feet: {feet},
             inches: {inches},
-            weight: {weight}
+            weight: {weight},
+            bmi: {BMI}
         })
     }
 
@@ -51,6 +66,7 @@ export default function Profile()
             <Text>Profile</Text>
             <View style = {styles.profileScreen}>
 
+                <Image source={{ uri: profilePic.toString() }} style={{width: '50%', height: '50%'}}/>
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Name:  </Text><TextInput 
                     style = {styles.profileData}

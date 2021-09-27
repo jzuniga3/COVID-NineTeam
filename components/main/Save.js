@@ -7,12 +7,18 @@ require("firebase/firebase-storage")
 
 export default function Save(props) {
 
-    const uploadImage = async () => {
+    const uploadImage = async ( type ) => {
         const uri = props.route.params.image;
-        const childPath = `image/${fire.auth().currentUser.uid}/${Math.random().toString(36)}`;
+        var childPath = '';
+
+        if(type === "image") {
+            childPath = `image/${fire.auth().currentUser.uid}/${Math.random().toString(36)}`;
+        } else {
+            childPath = `image/${fire.auth().currentUser.uid}/profilePicture.jpeg`;
+        }
+        
         const response = await fetch(uri);
         const blob = await response.blob();
-        console.log("blob passed")
         const task = fire
             .storage()
             .ref()
@@ -38,7 +44,8 @@ export default function Save(props) {
     return (
         <View style={{ flex: 1, justifyContent: 'space-evenly'}}>
             <Image source={{uri: props.route.params.image}} style={{ flex: 1, resizeMode: 'contain', flexDirection: 'row'}}/>
-            <Button title="Save" onPress={uploadImage}/>
+            <Button title="Save" onPress={() => uploadImage("image")}/>
+            <Button title="Make Profile Picture" onPress={() => uploadImage("profile")}/>
         </View>
     )
 }
