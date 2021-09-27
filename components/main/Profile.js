@@ -19,7 +19,7 @@ export default function Profile()
     const [weight, setWeight] = useState("");
     const [feet, setFeet] = useState("");
     const [inches, setInches] = useState("");
-
+    
     const [profilePic, setProfilePic] = useState("");
     const storage = fire.storage().ref();
 
