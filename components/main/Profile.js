@@ -54,7 +54,8 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Name:  </Text><TextInput 
                     style = {styles.profileData}
-                    // placeholder = {name.toString}
+                    placeholder = {name.toString()}
+                    returnKeyType = 'done'
                     onChangeText = {newName => setName({newName})}
                 />
                 </View>
@@ -62,7 +63,8 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Age:  </Text><TextInput 
                     style = {styles.profileData}
-                    // placeholder = { age.toString }
+                    placeholder = { age.toString() }
+                    returnKeyType = 'done'
                     onChangeText = {newAge => setAge({newAge})}
                 />
                 </View>
@@ -70,12 +72,14 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Height:  </Text><TextInput 
                     style = {styles.heightInput}
-                    // placeholder = { feet.toString }
+                    placeholder = { feet.toString() }
+                    returnKeyType = 'done'
                     onChangeText = {newFeet => setFeet({newFeet})}
                 />
                 <Text style = {styles.profileData}>'  </Text><TextInput 
                     style = {styles.heightInput}
-                    // placeholder = { inches.toString }
+                    placeholder = { inches.toString() }
+                    returnKeyType = 'done'
                     onChangeText = {newInches => setInches({newInches})}
                 />
                 <Text style = {styles.profileData}>"</Text>
@@ -84,7 +88,8 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Weight:  </Text><TextInput 
                     style = {styles.weightInput}
-                    // placeholder = { weight.toString }
+                    placeholder = { weight.toString() }
+                    returnKeyType = 'done'
                     onChangeText = {newWeight => setWeight({newWeight})}
                 />
                 <Text style = {styles.profileData}> lbs</Text>
