@@ -9,14 +9,16 @@ const handleLogout = () =>
     fire.auth().signOut()
 }
 
+var firstLoad = true;
+
 export default function Profile()
 {    
     const [name, setName] = useState("");
     const [sex, setSex] = useState("");
-    const [age, setAge] = useState(-1);
-    const [weight, setWeight] = useState(-1);
-    const [feet, setFeet] = useState(-1);
-    const [inches, setInches] = useState(-1);
+    const [age, setAge] = useState("");
+    const [weight, setWeight] = useState("");
+    const [feet, setFeet] = useState("");
+    const [inches, setInches] = useState("");
 
     const [profilePic, setProfilePic] = useState("");
     const storage = fire.storage().ref();
@@ -29,36 +31,49 @@ export default function Profile()
 
     var childPath = `image/${fire.auth().currentUser.uid}/profilePicture.jpeg`;
 
-    if(childPath != undefined) {
+    if(childPath != undefined) 
+    {
         storage.child(childPath).getDownloadURL().then((url) => {
             setProfilePic(url);
             console.log(url);
-          })
-    } else {
+        })
+    } 
+    else 
+    {
         console.log('child path is not defined...')
     }
 
-    const onChangePasswordPress = () =>
+    const updateProfile = () =>
     {
-        usersDB.doc(userID).update({
-            name: {name},
-            age: {age},
-            feet: {feet},
-            inches: {inches},
-            weight: {weight},
-            bmi: {BMI}
+        usersDB.doc(userID).update(
+        {
+            name: name,
+            age: age,
+            feet: feet,
+            inches: inches,
+            weight: weight
         })
     }
 
     //Get user information from firestore
-    usersDB.doc(userID).get().then((doc) => {
-        setName(doc.data().name)
-        setSex(doc.data().sex)
-        setAge(doc.data().age)
-        setWeight(doc.data().weight)
-        setFeet(doc.data().feet)
-        setInches(doc.data().inches)
-    })
+    const getUserInfo = () =>
+    {
+        usersDB.doc(userID).get().then((snapshot => 
+        {
+            setName(snapshot.data().name)
+            setSex(snapshot.data().sex)
+            setAge(snapshot.data().age)
+            setWeight(snapshot.data().weight)
+            setFeet(snapshot.data().feet)
+            setInches(snapshot.data().inches)
+        }))
+    }
+
+    if(firstLoad == true)
+    {
+        getUserInfo();
+        firstLoad = false;
+    }
 
     return (
         <SafeAreaView style = {styles.contentCenter}>
@@ -72,7 +87,7 @@ export default function Profile()
                     style = {styles.profileData}
                     placeholder = {name.toString()}
                     returnKeyType = 'done'
-                    onChangeText = {newName => setName({newName})}
+                    onChangeText = {newName => setName(newName)}
                 />
                 </View>
 
@@ -81,7 +96,7 @@ export default function Profile()
                     style = {styles.profileData}
                     placeholder = { age.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newAge => setAge({newAge})}
+                    onChangeText = {newAge => setAge(newAge)}
                 />
                 </View>
 
@@ -90,13 +105,13 @@ export default function Profile()
                     style = {styles.heightInput}
                     placeholder = { feet.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newFeet => setFeet({newFeet})}
+                    onChangeText = {newFeet => setFeet(newFeet)}
                 />
                 <Text style = {styles.profileData}>'  </Text><TextInput 
                     style = {styles.heightInput}
                     placeholder = { inches.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newInches => setInches({newInches})}
+                    onChangeText = {newInches => setInches(newInches)}
                 />
                 <Text style = {styles.profileData}>"</Text>
                 </View>
@@ -106,7 +121,7 @@ export default function Profile()
                     style = {styles.weightInput}
                     placeholder = { weight.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newWeight => setWeight({newWeight})}
+                    onChangeText = {newWeight => setWeight(newWeight)}
                 />
                 <Text style = {styles.profileData}> lbs</Text>
                 </View>
@@ -116,7 +131,7 @@ export default function Profile()
 
                 <Button
                     title = 'Save changes'
-                    onPress = {onChangePasswordPress}
+                    onPress = {updateProfile}
                 />
                 <Button
                     onPress = {handleLogout}
