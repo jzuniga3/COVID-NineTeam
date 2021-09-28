@@ -20,7 +20,7 @@ export default function Profile()
     const [feet, setFeet] = useState("");
     const [inches, setInches] = useState("");
     
-    const [profilePic, setProfilePic] = useState("");
+    const [profilePic, setProfilePic] = useState(undefined);
     const storage = fire.storage().ref();
 
     const usersDB = fire.firestore().collection('users')
@@ -81,7 +81,7 @@ export default function Profile()
             <Text>Profile</Text>
             <View style = {styles.profileScreen}>
 
-                <Image source={{ uri: profilePic.toString() }} style={{width: '50%', height: '50%'}}/>
+                <Image source={{ uri: profilePic }} style={{width: '50%', height: '50%'}}/>
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Name:  </Text><TextInput 
                     style = {styles.profileData}
