@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const handleLogout = () => 
 {
     fire.auth().signOut()
+    location.reload(); 
 }
 
 var firstLoad = true;
