@@ -52,7 +52,7 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Name:  </Text><TextInput 
                     style = {styles.profileData}
-                    placeholder = {name}
+                    placeholder = { name }
                     onChangeText = {newName => setName({newName})}
                 />
                 </View>
@@ -60,7 +60,7 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Age:  </Text><TextInput 
                     style = {styles.profileData}
-                    placeholder = {age}
+                    placeholder = { age.toString }
                     onChangeText = {newAge => setAge({newAge})}
                 />
                 </View>
@@ -68,12 +68,12 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Height:  </Text><TextInput 
                     style = {styles.heightInput}
-                    placeholder = {feet}
+                    placeholder = { feet.toString }
                     onChangeText = {newFeet => setFeet({newFeet})}
                 />
                 <Text style = {styles.profileData}>'  </Text><TextInput 
                     style = {styles.heightInput}
-                    placeholder = {inches}
+                    placeholder = { inches.toString }
                     onChangeText = {newInches => setInches({newInches})}
                 />
                 <Text style = {styles.profileData}>"</Text>
@@ -82,7 +82,7 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Weight:  </Text><TextInput 
                     style = {styles.weightInput}
-                    placeholder = {weight}
+                    placeholder = { weight.toString }
                     onChangeText = {newWeight => setWeight({newWeight})}
                 />
                 <Text style = {styles.profileData}> lbs</Text>
