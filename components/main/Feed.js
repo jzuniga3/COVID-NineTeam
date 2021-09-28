@@ -7,7 +7,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Feed() 
 {
-    //calorie log     
+    //calorie log  
+    ///** lookup how to take collections in firebase   make new collection under current user then start current collect. 
+    // can a sub collection run under each user where they can enter their calories and it log (name,date,calories)
    const [dailyCalories, setDailyCalories] = useState("");
    var today = new Date();
    var logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
@@ -16,7 +18,7 @@ export default function Feed()
 
    const storage = fire.storage().ref();
 
-   const usersDB = fire.firestore().collection('users')
+   const usersDB = fire.firestore().collection('calories')
    const userID = fire.auth().currentUser.uid
 
 
@@ -25,7 +27,7 @@ export default function Feed()
     usersDB.doc(userID).update(
         {
             calories: dailyCalories,
-            day: logDate
+            date: today
           
         })
    }
