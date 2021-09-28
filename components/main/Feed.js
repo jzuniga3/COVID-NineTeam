@@ -115,7 +115,7 @@ const styles =
     },
     dateInput:
     {
-        fontsize: 20,
+        fontSize: 20,
         width: 200
     }
 
