@@ -32,6 +32,7 @@ export default function Feed()
         })
    }
 //************************* 
+/*
    const getUserInfo = () =>
     {
         usersDB.doc(userID).get().then((snapshot => 
@@ -48,7 +49,7 @@ export default function Feed()
         firstLoad = false;
     }
       
-   
+*/   
     return (
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
