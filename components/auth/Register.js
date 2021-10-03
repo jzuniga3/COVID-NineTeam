@@ -1,7 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react'
-import { View, Button, TextInput, Image } from 'react-native'
+import { View, Button, TextInput, Image, Text, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
+import { LinearGradient } from 'expo-linear-gradient';
+import colors from '../../assets/colors/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthTextInput from '../AuthTextInput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import fire from '../fire'
 
@@ -26,6 +31,7 @@ export default class Register extends Component {
         }
         this.onSignUp = this.onSignUp.bind(this)
     }
+
     //TODO: process codes for errors and display to user
     onSignUp() {
 
@@ -61,7 +67,10 @@ export default class Register extends Component {
     {
         const { password, confirmPassword } = this.state;
 
-        if (password != confirmPassword)
+        if (password == '') {
+            alert("Password cannot be blank!")
+        }
+        else if (password != confirmPassword)
         {
             alert("Your passwords do not match!");
         }
@@ -122,49 +131,58 @@ export default class Register extends Component {
     }
 
     render() {
+        const {navigation} = this.props;
+
         let {currentView} = this.state
 
         if (currentView == 1)
         {
             return (
-                <View style = {styles.contentCenter}>
-                <StatusBar barStyle='light-content' />
-                <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
-                    <View style = {styles.loginPrompt}>      
-                        <TextInput
-                            style = {styles.inputLabel}
-                            placeholder="email"
-                            mode = "outlined"
-                            returnKeyType = 'done'
-                            keyboardType = 'email-address'
-                            onChangeText={email => this.setState({ email })}
-                        />
-                        <TextInput
-                            style = {styles.inputLabel}
-                            placeholder="Password"
-                            mode = "outlined"
-                            returnKeyType = 'done'
-                            keyboardType = 'visible-password'
-                            secureTextEntry={ true }
-                            onChangeText={password => this.setState({ password })}
-                        />
-                        <TextInput
-                            style = {styles.inputLabel}
-                            placeholder="Confirm password"
-                            mode = "outlined"
-                            returnKeyType = 'done'
-                            keyboardType = 'visible-password'
-                            secureTextEntry={ true }
-                            onChangeText={confirmPassword => this.setState({ confirmPassword })}
-                        />
-                    
-                        <Button
-                            mode = "contained"
-                            onPress = {() => this.validatePassword()}
-                            title = "Next"
+                <View style={styles.container}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={[colors.lightBlue, colors.darkBlue]}
+          style={styles.background}
+        >
+            <SafeAreaView>
+                <KeyboardAwareScrollView
+                      resetScrollToCoords={{ x: 0, y: 0 }}
+                      scrollEnabled={false}
+                      contentContainerStyle={ Platform.OS === "ios" ? styles.ios : {} }
+                      >
+                    <View style={{ alignItems: 'center'}}>
+                        <Image 
+                        source={require('../../assets/images/logo.png')}
+                        style={styles.logo}
                         />
                     </View>
-                </View>
+                        <Text style={styles.headerText}>Sign Up</Text>
+                        <AuthTextInput 
+                            keyboardType='email-address'
+                            placeholder="example@gmail.com"
+                            onChangeText={email => this.setState({ email })}>
+                        Email</AuthTextInput>
+                        <AuthTextInput 
+                            secureTextEntry={true}
+                            onChangeText={password => this.setState({ password })}>
+                        Password</AuthTextInput>
+                        <AuthTextInput 
+                            secureTextEntry={true}
+                            onChangeText={confirmPassword => this.setState({ confirmPassword })}>
+                        Confirm Password</AuthTextInput>
+                    <View style={styles.footerText}>
+                        <Text style={styles.textRegular}>Already Registered? </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+                            <Text style={styles.textBold}>Login</Text>
+                        </TouchableOpacity>
+                    </View>
+                        <TouchableOpacity onPress={() => this.validatePassword()}>
+                            <Text style={styles.button}>Create Account</Text>
+                        </TouchableOpacity>
+                </KeyboardAwareScrollView>
+            </SafeAreaView>
+        </LinearGradient>
+    </View>
             )
         }
         else if (currentView == 2)
@@ -221,7 +239,6 @@ export default class Register extends Component {
                         />
 
                         <Button
-                            mode = "contained"
                             onPress={() => this.validateNumbers()}
                             title="Register"
                         />
@@ -266,5 +283,56 @@ const styles =
         height: '100%',
         backgroundColor: "#192879",
         alignItems: 'center'
-    }
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '100%'
+      },
+      logo: {
+          width: 163,
+          height: 161,
+          paddingTop: '5%'
+      },
+      headerText: {
+          fontSize: 22,
+          color: '#FFF',
+          fontFamily: 'NunitoSans-Bold',
+          paddingHorizontal: 51,
+          marginBottom: 7
+      },
+      footerText: {
+          flexDirection: 'row', 
+          justifyContent: 'flex-end',
+          marginRight: 37,
+      },
+      textBold: {
+          color: '#FFF',
+          fontFamily: 'NunitoSans-Bold',
+          fontSize: 14
+      },
+      textRegular: {
+          color: '#FFF',
+          fontFamily: 'NunitoSans-Regular',
+          fontSize: 14
+  
+      },
+      button: {
+          color: '#FFF',
+          fontSize: 16,
+          fontFamily: 'Montserrat-SemiBold',
+          marginLeft: '35%',
+          marginTop: '32%'
+      },
+      ios: {
+         height: '100%', 
+         width: '100%' 
+      }
 }
