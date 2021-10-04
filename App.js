@@ -109,22 +109,23 @@ export default class App extends Component {
     )
     }
 
-    if(!createdProfile) {
-    return(
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="CreateProfile">
-          <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
-        </Stack.Navigator>
-    </NavigationContainer>
-    )
-    }
+    // if(!createdProfile) {
+    // return(
+    //   <NavigationContainer>
+    //     <Stack.Navigator initialRouteName="CreateProfile">
+    //       <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
+    //     </Stack.Navigator>
+    // </NavigationContainer>
+    // )
+    // }
       
 
     return(
       // must be inside provider to allow redux to work
       <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName={"Main"}>
+          <Stack.Navigator initialRouteName={"CreateProfile"}>
+          <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
           <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false, animationEnabled: false}}/>
           <Stack.Screen name="AddContainer" component={AddScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
           <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
