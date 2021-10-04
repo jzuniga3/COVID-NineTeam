@@ -22,7 +22,7 @@ function AuthTextInput(props) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#FFF',
-        height: '10%',
+        height: 70,
         width: '85%',
         marginLeft: '7%',
         marginBottom: '4%',

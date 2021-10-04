@@ -15,13 +15,12 @@ import rootReducer from './redux/reducers'
 import thunk from 'redux-thunk';
 const store = createStore(rootReducer, applyMiddleware(thunk))
 
-import LandingScreen from './components/auth/Landing'
+import CreateProfileScreen from './components/auth/CreateProfile'
 import RegisterScreen from './components/auth/Register';
 import LoginScreen from './components/auth/Login'
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import SaveScreen from './components/main/Save'
-import Test from './screens/TestScreen';
 
 import * as Font from 'expo-font'
 
@@ -42,6 +41,7 @@ export default class App extends Component {
     this.state = {
       loaded: false,
       fontsLoaded: false,
+      createdProfile: false
     }
     LogBox.ignoreLogs(['Setting a timer']);
   }
@@ -58,19 +58,34 @@ export default class App extends Component {
       if(!user) {
         this.setState({
           loggedIn: false,
-          loaded: true
+          loaded: true,
+          createdProfile: false
         })
       } else {
         this.setState({
           loggedIn: true,
           loaded: true
         })
+
+      fire.firestore().collection('users')
+      .doc(fire.auth().currentUser.uid)
+      .get().then((doc) => {
+        if(doc.exists) {
+          this.setState({ createdProfile: true })
+        } else {
+          this.setState({ createdProfile: false})
+        }
+      })
+      .catch((error) => {
+        alert(error.message)
+      });
       }
     })
-  }
+    }
+      
 
   render() {
-    const { loggedIn, loaded } = this.state;
+    const { loggedIn, loaded, createdProfile } = this.state;
   
 
     // if not loaded display loading screen
@@ -87,22 +102,32 @@ export default class App extends Component {
     return (
       <NavigationContainer>
       <Stack.Navigator initialRouteName="Register">
-        {/* <Stack.Screen name="Landing" component={LandingScreen} options={{ headerShown: false}}/> */}
-        <Stack.Screen name="Register" component={RegisterScreen} navigation={this.props.navigation} options={{  headerShown: false }}/>
-        <Stack.Screen name="Login" component={LoginScreen}/>
+        <Stack.Screen name="Register" component={RegisterScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
+        <Stack.Screen name="Login" component={LoginScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
     )
     }
 
+    if(!createdProfile) {
+    return(
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="CreateProfile">
+          <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
+        </Stack.Navigator>
+    </NavigationContainer>
+    )
+    }
+      
+
     return(
       // must be inside provider to allow redux to work
       <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Main">
-            <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false}}/>
-            <Stack.Screen name="AddContainer" component={AddScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back" }}/>
-            <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back" }}/>
+          <Stack.Navigator initialRouteName={"Main"}>
+          <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false, animationEnabled: false}}/>
+          <Stack.Screen name="AddContainer" component={AddScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
+          <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

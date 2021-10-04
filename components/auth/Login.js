@@ -1,5 +1,10 @@
 import React, { Component } from 'react'
-import { View, Button, TextInput, Image } from 'react-native'
+import { View, Button, TextInput, Image, Text, TouchableOpacity } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient';
+import colors from '../../assets/colors/colors';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AuthTextInput from '../AuthTextInput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import fire from '../fire'
 
@@ -29,29 +34,51 @@ export default class Login extends Component {
 
 
     render() {
+
+        const {navigation} = this.props;
+
         return (
-            <View style = {styles.contentCenter}>
-                <View style = {styles.loginPrompt}>
-                <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
-                    <View>
-                        <TextInput
-                            style = {styles.inputLabel}
-                            placeholder="email"
-                            onChangeText={email => this.setState({ email })}
-                        />
-                        <TextInput
-                            style = {styles.inputLabel}
-                            placeholder="password"
-                            secureTextEntry={ true }
-                            onChangeText={password => this.setState({ password })}
-                        />
-                        <Button
-                            onPress={() => this.onSignIn()}
-                            title="Sign In"
-                        />
-                    </View>
+            <View style={styles.container}>
+                    <LinearGradient
+                    // Background Linear Gradient
+                    colors={[colors.lightBlue, colors.darkBlue]}
+                    style={styles.background}
+                    >
+                        <SafeAreaView>
+                            <KeyboardAwareScrollView
+                                resetScrollToCoords={{ x: 0, y: 0 }}
+                                scrollEnabled={false}
+                                contentContainerStyle={ Platform.OS === "ios" ? styles.ios : {} }
+                                >
+                                <View style={{ alignItems: 'center'}}>
+                                    <Image 
+                                    source={require('../../assets/images/logo.png')}
+                                    style={styles.logo}
+                                    />
+                                </View>
+                                    <Text style={styles.headerText}>Sign In</Text>
+                                    <AuthTextInput 
+                                        keyboardType='email-address'
+                                        placeholder="example@gmail.com"
+                                        onChangeText={email => this.setState({ email })}>
+                                    Email</AuthTextInput>
+                                    <AuthTextInput 
+                                        secureTextEntry={true}
+                                        onChangeText={password => this.setState({ password })}>
+                                    Password</AuthTextInput>
+                                <View style={styles.footerText}>
+                                    <Text style={styles.textRegular}>Not Registered? </Text>
+                                    <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+                                        <Text style={styles.textBold}>Create Account</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                    <TouchableOpacity  onPress={() => this.onSignIn()}>
+                                        <Text style={styles.button}>Login</Text>
+                                    </TouchableOpacity>
+                            </KeyboardAwareScrollView>
+                        </SafeAreaView>
+                    </LinearGradient>
                 </View>
-            </View>
         )
     }
 }
@@ -90,5 +117,57 @@ const styles =
         height: '100%',
         backgroundColor: "#192879",
         alignItems: 'center'
+    },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    background: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '100%'
+        },
+    logo: {
+        width: 163,
+        height: 161,
+        paddingTop: '5%'
+    },
+    headerText: {
+        fontSize: 22,
+        color: '#FFF',
+        fontFamily: 'NunitoSans-Bold',
+        paddingHorizontal: 51,
+        marginBottom: 7
+    },
+    footerText: {
+        flexDirection: 'row', 
+        justifyContent: 'flex-end',
+        marginRight: 37,
+    },
+    textBold: {
+        color: '#FFF',
+        fontFamily: 'NunitoSans-Bold',
+        fontSize: 14
+    },
+    textRegular: {
+        color: '#FFF',
+        fontFamily: 'NunitoSans-Regular',
+        fontSize: 14
+
+    },
+    button: {
+        color: '#FFF',
+        fontSize: 16,
+        fontFamily: 'Montserrat-SemiBold',
+        marginTop: '53%',
+        marginLeft: '45%'
+        
+    },
+    ios: {
+        height: '100%', 
+        width: '100%' 
     }
 }

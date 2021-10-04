@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 const handleLogout = () => 
 {
     fire.auth().signOut()
-    location.reload(); 
+    // location.reload(); 
 }
 
 var firstLoad = true;
@@ -70,11 +70,7 @@ export default function Profile()
         }))
     }
 
-    if(firstLoad == true)
-    {
-        getUserInfo();
-        firstLoad = false;
-    }
+    getUserInfo();
 
     return (
         <SafeAreaView style = {styles.contentCenter}>
