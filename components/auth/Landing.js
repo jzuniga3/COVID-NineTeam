@@ -6,7 +6,7 @@ export default function Landing({ navigation }) {
     return (
         <View style={{ flex: 1, justifyContent: 'center'}}>
         <StatusBar barStyle='light-content' />
-            <Button
+        <Button
                 title="Register"
                 onPress={() => navigation.navigate("Register")}
             />

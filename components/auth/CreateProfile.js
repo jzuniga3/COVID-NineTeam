@@ -1,12 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react'
-import { View, Button, TextInput, Image, Text, TouchableOpacity, KeyboardAvoidingView, Platform, Alert } from 'react-native'
+import { View, Button, TextInput, Image, Alert } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
-import { LinearGradient } from 'expo-linear-gradient';
-import colors from '../../assets/colors/colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import AuthTextInput from '../AuthTextInput';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import fire from '../fire'
 
@@ -17,6 +11,8 @@ export default class CreateProfile extends Component {
 
         this.state = 
         {
+            email: this.props.route.params.email,
+            password: this.props.route.params.password,
             name: '',
             sex: '',
             age: '',
@@ -29,13 +25,15 @@ export default class CreateProfile extends Component {
     }
 
     //TODO: process codes for errors and display to user
-    onSignUp = () => {
+    onSignUp = () => 
+    {
         const { name, sex, age, feet, inches, weight } = this.state;
 
-        var total_height = ((12 * parseInt(feet)) + parseInt(inches));
-        var bmiCalc = (parseFloat(( parseFloat(weight) / (total_height**2)) * 703)).toFixed(2);
+        var bmiCalc = this.calcBMI();
 
-        fire.firestore().collection("users")
+        fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((result) => 
+        {
+            fire.firestore().collection("users")
             .doc(fire.auth().currentUser.uid)
             .set({
                 name,
@@ -45,18 +43,35 @@ export default class CreateProfile extends Component {
                 inches,
                 weight,
                 bmi: bmiCalc
-            })
-            .then(() => {
+            }).then(() => 
+            {
                 console.log("Document successfully written!");
                 this.setState({ bmi: bmiCalc });
-                this.props.navigation.navigate("Main");
             })
-            .catch((error) => {
+            .catch((error) => 
+            {
                 console.error("Error writing document: ", error);
-            });
-            
+            })
+        }).catch((error) => 
+        {
+            console.log(error);
+            Alert.alert('Error', error.message, [{text: 'OK'},], {cancelable: true});
+        })
     }
 
+    calcBMI = () => 
+    {
+        var totalHeight = (this.state.feet * 12) + this.state.inches;
+
+        if(this.state.sex == "male")
+        {
+            return 66 + (6.3 * this.state.weight) + (12.9 * totalHeight) - (6.8 * this.state.age)
+        }
+        else
+        {
+            return 65 + (4.3 * this.state.weight) + (4.7 * totalHeight) - (4.7 * this.state.age)
+        }
+    }
 
     validateNumbers = () =>
     {

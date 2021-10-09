@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Button, TextInput, Image, Text, TouchableOpacity } from 'react-native'
+import { View, Button, TextInput, Image, Text, TouchableOpacity, Platform } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../../assets/colors/colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
