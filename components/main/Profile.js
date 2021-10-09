@@ -10,8 +10,6 @@ const handleLogout = () =>
     // location.reload(); 
 }
 
-var firstLoad = true;
-
 export default function Profile()
 {    
     const [name, setName] = useState("");
@@ -20,15 +18,13 @@ export default function Profile()
     const [weight, setWeight] = useState("");
     const [feet, setFeet] = useState("");
     const [inches, setInches] = useState("");
+    const [bmi, setBmi] = useState("");
     
     const [profilePic, setProfilePic] = useState(undefined);
     const storage = fire.storage().ref();
 
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
-    
-    let totalHeight = (feet*12) + inches*1;
-    const BMI = (weight/(totalHeight*totalHeight)*703).toFixed(2);
 
     var childPath = `image/${fire.auth().currentUser.uid}/profilePicture.jpeg`;
 
@@ -67,6 +63,7 @@ export default function Profile()
             setWeight(snapshot.data().weight)
             setFeet(snapshot.data().feet)
             setInches(snapshot.data().inches)
+            setBmi(snapshot.data().bmi)
         }))
     }
 
@@ -123,7 +120,7 @@ export default function Profile()
                 <Text style = {styles.profileData}> lbs</Text>
                 </View>
 
-                <Text style = {styles.profileData}>BMI: {BMI}</Text>
+                <Text style = {styles.profileData}>BMI: {bmi.toString()}</Text>
                 <Text>{`\n\n`}</Text>
 
                 <Button

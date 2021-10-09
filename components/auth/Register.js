@@ -25,9 +25,7 @@ export default class Register extends Component {
 
     validatePassword = () => 
     {
-        
         const { email, password, confirmPassword } = this.state;
-        
 
         if (password == '') {
             alert("Password cannot be blank!")
@@ -38,23 +36,7 @@ export default class Register extends Component {
         }
         else
         {
-        fire.auth().createUserWithEmailAndPassword(email, password)
-            .then((result) => 
-            {
-            })
-            .catch((error) => {
-            console.log(error);            
-            Alert.alert(
-                'Error',
-                error.message,
-                [
-                {text: 'OK'},
-                ],
-                { 
-                cancelable: true 
-                }
-            );
-        })
+            this.props.navigation.navigate("CreateProfile", {email: email, password: password});
         }
     }
 
