@@ -21,6 +21,7 @@ import LoginScreen from './components/auth/Login'
 import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import SaveScreen from './components/main/Save'
+import ChoosePurposeScreen from './components/auth/ChoosePurpose'
 
 import * as Font from 'expo-font'
 
@@ -105,6 +106,7 @@ export default class App extends Component {
         <Stack.Screen name="Register" component={RegisterScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
         <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
+        <Stack.Screen name="ChoosePurpose" component={ChoosePurposeScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
     )

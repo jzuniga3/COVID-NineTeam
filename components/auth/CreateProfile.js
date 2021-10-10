@@ -21,42 +21,16 @@ export default class CreateProfile extends Component {
             weight: '',
             bmi: '',
         }
-        this.onSignUp = this.onSignUp.bind(this)
     }
 
     //TODO: process codes for errors and display to user
-    onSignUp = () => 
+    onCreateProfile = () => 
     {
-        const { name, sex, age, feet, inches, weight } = this.state;
+        const { email, password, name, sex, age, feet, inches, weight } = this.state;
 
         var bmiCalc = this.calcBMI();
 
-        fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((result) => 
-        {
-            fire.firestore().collection("users")
-            .doc(fire.auth().currentUser.uid)
-            .set({
-                name,
-                sex,
-                age,
-                feet,
-                inches,
-                weight,
-                bmi: bmiCalc
-            }).then(() => 
-            {
-                console.log("Document successfully written!");
-                this.setState({ bmi: bmiCalc });
-            })
-            .catch((error) => 
-            {
-                console.error("Error writing document: ", error);
-            })
-        }).catch((error) => 
-        {
-            console.log(error);
-            Alert.alert('Error', error.message, [{text: 'OK'},], {cancelable: true});
-        })
+        this.props.navigation.navigate("ChoosePurpose", {email: email, password: password, name: name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc});
     }
 
     calcBMI = () => 
@@ -119,7 +93,7 @@ export default class CreateProfile extends Component {
         //If everything is valid
         else
         {
-            this.onSignUp();
+            this.onCreateProfile();
         }
     }
 
