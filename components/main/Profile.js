@@ -72,7 +72,7 @@ export default function Profile()
     return (
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
-            <Text>Profile</Text>
+            <Text style = {{color: '#FFFFFF'}}>Profile</Text>
             <View style = {styles.profileScreen}>
 
                 <Image source={{ uri: profilePic }} style={{width: '50%', height: '50%'}}/>
