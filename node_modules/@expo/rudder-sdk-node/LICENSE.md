@@ -1,5 +1,6 @@
 MIT License
 
+Copyright (c) 2021 650 Industries, Inc. (Expo)
 Copyright (c) 2017 Segment, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

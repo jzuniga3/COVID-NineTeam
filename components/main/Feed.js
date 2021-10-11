@@ -53,7 +53,7 @@ export default function Feed()
     return (
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
-            <Text>Feed</Text>
+            <Text style = {{color: '#FFFFFF'}}>Feed</Text>
             <View style = {styles.feedScreen}>
 
 
