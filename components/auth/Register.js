@@ -129,54 +129,63 @@ const styles =
         backgroundColor: "#192879",
         alignItems: 'center'
     },
-    container: {
+    container: 
+    {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
       },
-    background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: '100%'
+    background: 
+    {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '100%'
     },
-    logo: {
+    logo: 
+    {
         width: 163,
         height: 161,
         paddingTop: '5%'
     },
-    headerText: {
+    headerText: 
+    {
         fontSize: 22,
         color: '#FFF',
         fontFamily: 'NunitoSans-Bold',
         paddingHorizontal: 51,
         marginBottom: 7
     },
-    footerText: {
+    footerText: 
+    {
         flexDirection: 'row', 
         justifyContent: 'flex-end',
         marginRight: 37,
     },
-    textBold: {
+    textBold: 
+    {
         color: '#FFF',
         fontFamily: 'NunitoSans-Bold',
         fontSize: 14
     },
-    textRegular: {
+    textRegular: 
+    {
         color: '#FFF',
         fontFamily: 'NunitoSans-Regular',
         fontSize: 14
 
     },
-    button: {
+    button: 
+    {
         color: '#FFF',
         fontSize: 16,
         fontFamily: 'Montserrat-SemiBold',
         marginLeft: '35%',
         marginTop: '32%'
     },
-    ios: {
+    ios: 
+    {
         height: '100%', 
         width: '100%' 
     }

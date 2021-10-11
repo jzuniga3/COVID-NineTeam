@@ -20,7 +20,8 @@ export default class CreateProfile extends Component {
             inches: this.props.route.params.inches,
             weight: this.props.route.params.weight,
             bmi: this.props.route.params.bmi,
-            purpose: ''
+            purpose: '',
+            id: ''
         }
         this.onSignUp = this.onSignUp.bind(this)
     }
@@ -42,7 +43,9 @@ export default class CreateProfile extends Component {
                 inches,
                 weight,
                 bmi,
-                purpose
+                purpose,
+                profilePicId: 'https://firebasestorage.googleapis.com/v0/b/weightexchangeapp.appspot.com/o/image%2Fdefault-avatar.jpg?alt=media&token=48a4f400-61aa-4b78-9b02-392a320b15f9',
+                id: fire.auth().currentUser.uid
             }).then(() => 
             {
                 console.log("Document successfully written!");

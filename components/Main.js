@@ -35,7 +35,7 @@ export class Main extends Component {
                 <Tab.Screen name="Userlist" component={UserlistScreen} 
                     options= {{
                         tabBarIcon: ({color, size}) => (
-                            <MaterialCommunityIcons name="home" color={color} size={26}/>
+                            <MaterialCommunityIcons name="account-multiple" color={color} size={26}/>
                         ), tabBarLabelPosition: 'below-icon'
                     }}
                 />

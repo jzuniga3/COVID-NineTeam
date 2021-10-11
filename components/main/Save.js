@@ -36,6 +36,7 @@ export default function Save(props) {
             task.snapshot.ref.getDownloadURL().then((snapshot) => {
                 console.log(snapshot);
                 alert(alertMsg);
+                fire.firestore().collection('users').doc(fire.auth().currentUser.uid).update({profilePicId: snapshot});
             })
         }
 
