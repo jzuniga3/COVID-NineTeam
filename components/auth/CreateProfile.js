@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { View, Button, TextInput, Image, Alert } from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 
-import fire from '../fire'
-
 export default class CreateProfile extends Component {
 
     constructor(props) {

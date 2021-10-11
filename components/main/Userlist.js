@@ -9,8 +9,8 @@ import colors from '../../assets/colors/colors';
 export default function Userlist()
 {    
     const [userList, setUserList] = useState(null);
-    const storage = fire.storage().ref();
     const usersDB = fire.firestore().collection('users')
+    const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
 
     //Get user information from firestore
     const getUsers = () =>
@@ -20,9 +20,14 @@ export default function Userlist()
             let userData = querySnapshot.docs.map(doc => doc.data())
             setUserList(userData)
         }).catch(function(error) {console.log('Error getting documents: ', error)})
+
+        setUserDataIsRetrieved(true);
     }
-      
-    getUsers();
+
+    if (userDataIsRetrieved == false)
+    {
+        getUsers();
+    }
 
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>

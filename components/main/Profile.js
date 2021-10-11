@@ -22,6 +22,7 @@ export default function Profile()
     const [inches, setInches] = useState("");
     const [bmi, setBmi] = useState("");
     const [profilePic, setProfilePic] = useState(undefined);
+    const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
 
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
@@ -36,6 +37,8 @@ export default function Profile()
             inches: inches,
             weight: weight
         })
+
+        setUserDataIsRetrieved(false);
     }
 
     //Get user information from firestore
@@ -52,9 +55,14 @@ export default function Profile()
             setBmi(snapshot.data().bmi)
             setProfilePic(snapshot.data().profilePicId)
         }))
+
+        setUserDataIsRetrieved(true);
     }
 
-    getUserInfo();
+    if (userDataIsRetrieved == false)
+    {
+        getUserInfo();
+    }
 
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
