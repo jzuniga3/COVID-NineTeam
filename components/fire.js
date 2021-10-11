@@ -1,14 +1,14 @@
 import firebase from 'firebase';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBn-HXdCwAxePnognFZ9-4nWpNrJYYfCG8",
-    authDomain: "weightexchangeapp.firebaseapp.com",
-    databaseURL: "https://weightexchangeapp-default-rtdb.firebaseio.com",
-    projectId: "weightexchangeapp",
-    storageBucket: "weightexchangeapp.appspot.com",
-    messagingSenderId: "1086264875488",
-    appId: "1:1086264875488:web:758ac029a2426b092eb385",
-    measurementId: "G-ZT4PY1KNGK"
+    apiKey: "AIzaSyA7rgIT_5KypkwHEUWdU78ewTiy7tvgvCQ",
+    authDomain: "weightexchangeapplication.firebaseapp.com",
+    databaseURL: "https://weightexchangeapplication.firebaseio.com",
+    projectId: "weightexchangeapplication",
+    storageBucket: "weightexchangeapplication.appspot.com",
+    messagingSenderId: "42660337059",
+    appId: "1:42660337059:web:eb1ede6124d6dc4431f616",
+    measurementId: "G-DMRH6L0BB3"
   }
   
   const fire = firebase.initializeApp(firebaseConfig)
