@@ -1,3 +1,5 @@
+feed:
+
 import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 
@@ -7,7 +9,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function Feed() 
 {
-    //calorie log     
+    //calorie log  
+    ///** lookup how to take collections in firebase   make new collection under current user then start current collect. 
+    // can a sub collection run under each user where they can enter their calories and it log (name,date,calories)
    const [dailyCalories, setDailyCalories] = useState("");
    var today = new Date();
    var logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
@@ -16,20 +20,72 @@ export default function Feed()
 
    const storage = fire.storage().ref();
 
+   const calorieDB = fire.firestore().collection('calories')
    const usersDB = fire.firestore().collection('users')
    const userID = fire.auth().currentUser.uid
 
+   const [name, setName] = useState("");
+   const [sex, setSex] = useState("");
+   const [age, setAge] = useState("");
+   const [weight, setWeight] = useState("");
+   const [feet, setFeet] = useState("");
+   const [inches, setInches] = useState("");
+   const [recommendedCalories, setRecommendedCalories] = useState("");
+   const [gainCalories, setGainCalories] = useState("");
+   const [loseCalories, setLoseCalories] = useState("");
 
    const updateFeed = () => 
    {
-    usersDB.doc(userID).update(
+    calorieDB.doc(userID).update(
         {
             calories: dailyCalories,
-            day: logDate
+            date: today
           
         })
    }
+      
+   usersDB.doc(userID).get().then((snapshot => 
+    {
+        setSex(snapshot.data().sex)
+        setWeight(snapshot.data().weight)
+        setFeet(snapshot.data().feet)
+        setInches(snapshot.data().inches)
+        setAge(snapshot.data().age)
+    }))
+
+//Recommended calories to maintain/gain/lose weight   
+
+//BMR 
+
+const calculateCalories = () => 
+{
+    if (sex == "male") {
+        setRecommendedCalories((66 + (6.3 * weight) + (12.9 * (feet * 12) + inches))
+         - (6.8 * age) * 1.2);
+
+    } else {
+        setRecommendedCalories((65 + (4.3 *weight) + (4.7 * (feet * 12) + inches)) 
+        - (4.7 * age) * 1.2);
+
+    }
+}
+
+
+const calculateGainCalories = () =>
+{
+    setGainCalories(recommendedCalories + 500);
+
+}
+
+
+const calculateLoseCalories = () =>
+{
+    setLoseCalories(recommendedCalories - 500);
+
+}
+
 //************************* 
+/*
    const getUserInfo = () =>
     {
         usersDB.doc(userID).get().then((snapshot => 
@@ -46,11 +102,11 @@ export default function Feed()
         firstLoad = false;
     }
       
-   
+*/   
     return (
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
-            <Text style = {{color: '#FFFFFF'}}>Feed</Text>
+            <Text>Feed</Text>
             <View style = {styles.feedScreen}>
 
 
@@ -68,8 +124,7 @@ export default function Feed()
                 <Text style = {styles.feedData}>Date:  </Text><TextInput 
                     style = {styles.dateInput}
                     placeholder = { logDate.toString() }
-                   // returnKeyType = 'done'
-                   // onChangeText = {newlogDate => setFeet(newlogDate)}
+
                 />
                 </View>
 
@@ -78,6 +133,39 @@ export default function Feed()
                     title = 'Save changes'
                     onPress = {updateFeed}
                 />
+                
+                
+                <Button
+                    title = 'Calculate Calories'
+                    onPress = {calculateCalories}
+                />
+
+
+                <View style = {styles.feedRow}>
+                <Text style = {styles.feedData}>Recommended Daily Caloric Intake to Maintain:  </Text><TextInput 
+                    style = {styles.dateInput}
+                    placeholder = { recommendedCalories.toString() }
+                    returnKeyType = 'done'
+                />
+                </View>
+
+                <View style = {styles.feedRow}>
+                <Text style = {styles.feedData}>Daily Caloric Intake to Gain:  </Text><TextInput 
+                    style = {styles.calorieInput}
+                    placeholder = { gainCalories.toString() }
+                    returnKeyType = 'done'
+                />
+                </View>
+
+                <View style = {styles.feedRow}>
+                <Text style = {styles.feedData}>Daily Caloric Intake to Donate:  </Text><TextInput 
+                    style = {styles.calorieInput}
+                    placeholder = { loseCalories.toString() }
+                    returnKeyType = 'done'
+                />
+                </View>
+
+                
                 
             </View>
         </SafeAreaView>
