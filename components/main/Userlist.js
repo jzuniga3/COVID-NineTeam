@@ -3,26 +3,14 @@ import { StatusBar } from 'expo-status-bar'
 import fire from '../fire'
 import { Text, View, FlatList, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { LinearGradient } from 'expo-linear-gradient';
+import colors from '../../assets/colors/colors';
 
 export default function Userlist()
 {    
     const [userList, setUserList] = useState(null);
-    //const storage = fire.storage().ref();
+    const storage = fire.storage().ref();
     const usersDB = fire.firestore().collection('users')
-
-    //var childPath = `image/${fire.auth().currentUser.uid}/profilePicture.jpeg`;
-
-    /* if(childPath != undefined) 
-    {
-        storage.child(childPath).getDownloadURL().then((url) => {
-            setProfilePic(url);
-            console.log(url);
-        })
-    } 
-    else 
-    {
-        console.log('child path is not defined...')
-    } */
 
     //Get user information from firestore
     const getUsers = () =>
@@ -35,31 +23,71 @@ export default function Userlist()
     }
       
     getUsers();
-    //alertUserList();
 
     return (
+        <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
-            <Text style = {{color: '#FFFFFF'}}>List of Users</Text>
-            <View style = {styles.profileScreen}>
-                <FlatList
+            <Text style = {styles.pageHeader}>List of Users</Text>
+            <View style = {styles.innerScreen}>
+                {userList != null &&
+                    <FlatList
                     data={userList}
-                    renderItem={({item}) => <Text>{item.name} - I want to {item.purpose} weight!</Text>}
-                />
+                    renderItem={({item}) => 
+                        <View style = {styles.profileData}>
+                            <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
+                            <Text style= {styles.name}>{item.name}</Text>
+                            <Text style = {styles.purposeText}>I want to {item.purpose} weight!{'\n'}</Text>
+                        </View>}
+                    />
+                }
           </View>
         </SafeAreaView>
+        </LinearGradient>
     );
 }   
 
 const styles =
 {
+    name:
+    {
+        fontSize: 23,
+        fontFamily: 'NunitoSans-Bold',
+        marginLeft: 10
+    },
+    purposeText:
+    {
+        fontFamily: 'NunitoSans-Regular',
+        fontSize: 18,
+        marginLeft: 10
+    },
+    profilePicture:
+    {
+        marginLeft: 10,
+        marginTop: 10,
+        width: '180px',
+        height: '180px'
+    },
+    outerScreen: 
+    {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '100%'
+    },
+    pageHeader:
+    {
+        fontSize: 30,
+        fontFamily: 'NunitoSans-Bold',
+        color: "#000000"
+    },
     contentCenter:
     {
         height: '100%',
-        backgroundColor: "#192879",
         alignItems: 'center'
     },
-    profileScreen:
+    innerScreen:
     {
         height: '80%',
         width: '80%',
@@ -67,20 +95,7 @@ const styles =
     },
     profileData:
     {
-        fontSize: 20,
+        borderWidth: 0.25,
+        borderColor: "#D3D3D3"
     },
-    profileRow:
-    {
-        flexDirection: 'row',
-    },
-    heightInput:
-    {
-        fontSize: 20,
-        width: 25
-    },
-    weightInput:
-    {
-        fontSize: 20,
-        width: 40
-    }
 }
