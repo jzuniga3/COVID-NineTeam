@@ -31,19 +31,26 @@ export default class CreateProfile extends Component {
         this.props.navigation.navigate("ChoosePurpose", {email: email, password: password, name: name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc});
     }
 
-    calcBMI = () => 
+    // calcBMI = () => 
+    // {
+    //     var totalHeight = (this.state.feet * 12) + this.state.inches;
+
+    //     if(this.state.sex == "male")
+    //     {
+    //         return 66 + (6.3 * this.state.weight) + (12.9 * totalHeight) - (6.8 * this.state.age)
+    //     }
+    //     else
+    //     {
+    //         return 65 + (4.3 * this.state.weight) + (4.7 * totalHeight) - (4.7 * this.state.age)
+    //     }
+    // }
+    calcBMI =() =>
     {
         var totalHeight = (this.state.feet * 12) + this.state.inches;
 
-        if(this.state.sex == "male")
-        {
-            return 66 + (6.3 * this.state.weight) + (12.9 * totalHeight) - (6.8 * this.state.age)
-        }
-        else
-        {
-            return 65 + (4.3 * this.state.weight) + (4.7 * totalHeight) - (4.7 * this.state.age)
-        }
+        return (((this.state.weight / (totalHeight * totalHeight)) * 703)*100).toFixed(2)
     }
+
 
     validateNumbers = () =>
     {

@@ -1,5 +1,3 @@
-feed:
-
 import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 
@@ -34,6 +32,8 @@ export default function Feed()
    const [gainCalories, setGainCalories] = useState("");
    const [loseCalories, setLoseCalories] = useState("");
 
+   var totalHeight = ((feet * 12) + Number(inches));
+
    const updateFeed = () => 
    {
     calorieDB.doc(userID).update(
@@ -56,16 +56,18 @@ export default function Feed()
 //Recommended calories to maintain/gain/lose weight   
 
 //BMR 
-
+//Harris-Benedict Formula
 const calculateCalories = () => 
 {
     if (sex == "male") {
-        setRecommendedCalories((66 + (6.3 * weight) + (12.9 * (feet * 12) + inches))
-         - (6.8 * age) * 1.2);
+        
+        setRecommendedCalories((66 + (6.3 * weight) + Number(12.9 * totalHeight) - (6.8 * age)));
+         
 
     } else {
-        setRecommendedCalories((65 + (4.3 *weight) + (4.7 * (feet * 12) + inches)) 
-        - (4.7 * age) * 1.2);
+       
+        setRecommendedCalories((65 + (4.3 * weight) + Number(4.7 * totalHeight) - (4.7 * age)));
+
 
     }
 }
@@ -136,31 +138,40 @@ const calculateLoseCalories = () =>
                 
                 
                 <Button
-                    title = 'Calculate Calories'
+                    title = 'Calculate Recommended Calories to Maintain Weight'
                     onPress = {calculateCalories}
                 />
+                <Button
+                    title = 'Calculate Recommended Calories to Gain Weight'
+                    onPress = {calculateGainCalories}
+                />
+                <Button
+                    title = 'Calculate Recommended Calories to Lose Weight'
+                    onPress = {calculateLoseCalories}
+                />
+
 
 
                 <View style = {styles.feedRow}>
                 <Text style = {styles.feedData}>Recommended Daily Caloric Intake to Maintain:  </Text><TextInput 
                     style = {styles.dateInput}
-                    placeholder = { recommendedCalories.toString() }
+                    placeholder = { recommendedCalories.toString().substring(0,4)}
                     returnKeyType = 'done'
                 />
                 </View>
 
                 <View style = {styles.feedRow}>
                 <Text style = {styles.feedData}>Daily Caloric Intake to Gain:  </Text><TextInput 
-                    style = {styles.calorieInput}
-                    placeholder = { gainCalories.toString() }
+                    style = {styles.dateInput}
+                    placeholder = { gainCalories.toString().substring(0,4)}
                     returnKeyType = 'done'
                 />
                 </View>
 
                 <View style = {styles.feedRow}>
                 <Text style = {styles.feedData}>Daily Caloric Intake to Donate:  </Text><TextInput 
-                    style = {styles.calorieInput}
-                    placeholder = { loseCalories.toString() }
+                    style = {styles.dateInput}
+                    placeholder = { loseCalories.toString().substring(0,4)}
                     returnKeyType = 'done'
                 />
                 </View>
