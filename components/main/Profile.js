@@ -23,6 +23,7 @@ export default function Profile()
     const [bmi, setBmi] = useState("");
     const [profilePic, setProfilePic] = useState(undefined);
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
+    const [purpose, setPurpose] = useState("");
 
     const usersDB = fire.firestore().collection('users')
     const userID = fire.auth().currentUser.uid
@@ -35,7 +36,8 @@ export default function Profile()
             age: age,
             feet: feet,
             inches: inches,
-            weight: weight
+            weight: weight,
+            purpose: purpose
         })
 
         setUserDataIsRetrieved(false);
@@ -54,6 +56,7 @@ export default function Profile()
             setInches(snapshot.data().inches)
             setBmi(snapshot.data().bmi)
             setProfilePic(snapshot.data().profilePicId)
+            setPurpose(snapshot.data().purpose)
         }))
 
         setUserDataIsRetrieved(true);
@@ -118,6 +121,10 @@ export default function Profile()
 
                 <Text style = {styles.profileData}>BMI: <Text style = {styles.profileInput}>{bmi.toString()}</Text></Text>
                 <Text>{`\n\n`}</Text>
+
+                <View style = {styles.profileRow}>
+                <Text style = {styles.profileData}>Purpose: {purpose.toString() + " weight"} </Text>
+                </View>
 
                 <Button
                     style = {styles.profileButton}
