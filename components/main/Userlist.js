@@ -54,7 +54,7 @@ export default function Userlist()
                         <View style = {styles.profileData}>
                             <TouchableOpacity onPress = {() => togglePopup(item)}>
                                 <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
-                                <Text style= {styles.name}>{item.name}</Text>
+                                <Text style= {styles.name}>{item.first_name + " " + item.last_name}</Text>
                                 <Text style = {styles.purposeText}>I want to {item.purpose} weight!{'\n'}</Text>
                             </TouchableOpacity>
                         </View>}
@@ -66,7 +66,7 @@ export default function Userlist()
                     <View style = {styles.center}>
                         <View style = {styles.modalBody}>
                             <TouchableOpacity style = {styles.xbutton} onPress = {() => togglePopup(null)}>X</TouchableOpacity>
-                            <Text>{popupItem.name}</Text>
+                            <Text>{popupItem.first_name}</Text>
                             <Text>{popupItem.sex}</Text>
                             <Text>{popupItem.feet}' {popupItem.inches}"</Text>
                             <Text>{popupItem.weight}lbs</Text>
