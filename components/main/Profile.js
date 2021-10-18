@@ -4,6 +4,7 @@ import fire from '../fire'
 import { Text, View, Button, TextInput, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
+import MaterialCommunityIcons from '@react-navigation/material-bottom-tabs'
 import colors from '../../assets/colors/colors';
 
 const handleLogout = () => 
@@ -73,13 +74,14 @@ export default function Profile()
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
         <SafeAreaView style = {styles.contentCenter}>
-            <StatusBar barStyle='light-content' />
-            <Text style = {styles.pageHeader}>Profile</Text>
             <View style = {styles.innerScreen}>
 
-                <Image source={{ uri: profilePic }} style={styles.profilePicture}/>
+                <View style={{ flex: 1, alignItems: 'center'}}>
+                    <Text style = {styles.pageHeader}>Profile</Text>
+                    <Image source={{ uri: profilePic }} style={styles.profilePicture}/>
+                </View>
                 <View style = {styles.profileRow}>
-                <Text style = {styles.profileData}>Name:  </Text><TextInput 
+                <Text style = {styles.profileData}>Name  </Text><TextInput 
                     style = {styles.profileInput}
                     placeholder = {firstName.toString() + " "}
                     returnKeyType = 'done'
@@ -94,7 +96,7 @@ export default function Profile()
                 </View>
 
                 <View style = {styles.profileRow}>
-                <Text style = {styles.profileData}>Age:  </Text><TextInput 
+                <Text style = {styles.profileData}>Age  </Text><TextInput 
                     style = {styles.profileInput}
                     placeholder = { age.toString() }
                     returnKeyType = 'done'
@@ -103,7 +105,7 @@ export default function Profile()
                 </View>
 
                 <View style = {styles.profileRow}>
-                <Text style = {styles.profileData}>Height:  </Text><TextInput 
+                <Text style = {styles.profileData}>Height  </Text><TextInput 
                     style = {styles.heightInput}
                     placeholder = { feet.toString() }
                     returnKeyType = 'done'
@@ -119,7 +121,7 @@ export default function Profile()
                 </View>
 
                 <View style = {styles.profileRow}>
-                <Text style = {styles.profileData}>Weight:  </Text><TextInput 
+                <Text style = {styles.profileData}>Weight  </Text><TextInput 
                     style = {styles.weightInput}
                     placeholder = { weight.toString() }
                     returnKeyType = 'done'
@@ -128,23 +130,26 @@ export default function Profile()
                 <Text style = {styles.profileInput}> lbs</Text>
                 </View>
 
-                <Text style = {styles.profileData}>BMI: <Text style = {styles.profileInput}>{bmi.toString()}</Text></Text>
+                <Text style = {styles.profileData}>BMI <Text style = {styles.profileInput}>{bmi.toString()}</Text></Text>
                 <Text>{`\n\n`}</Text>
 
                 <View style = {styles.profileRow}>
-                <Text style = {styles.profileData}>Purpose: {purpose.toString() + " weight"} </Text>
+                <Text style = {styles.profileData}>Purpose {purpose.toString() + " weight"} </Text>
                 </View>
 
+                <View style={{ flex: 1, flexDirection: 'row'}}>
                 <Button
                     style = {styles.profileButton}
                     title = 'Save changes'
                     onPress = {updateProfile}
                 />
+                {/* <MaterialCommunityIcons name="account-circle" color={colors.darkBlue} size={26}/> */}
                 <Button
                     style = {styles.profileButton}
                     onPress = {handleLogout}
                     title = 'Logout'
                 />
+                </View>
             </View>
         </SafeAreaView>
         </LinearGradient>
@@ -160,9 +165,16 @@ const styles =
     },
     innerScreen:
     {
-        height: '80%',
-        width: '80%',
-        backgroundColor: "#FFFFFF"
+        height: '93%',
+        width: '100%',
+        backgroundColor: "#FFFFFF",
+        marginTop: '12%',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 0.7,
+        shadowRadius: 80,
+        shadowColor: '#000',
     },
     outerScreen: 
     {
@@ -174,32 +186,36 @@ const styles =
     },
     pageHeader:
     {
-        fontSize: 30,
-        fontFamily: 'NunitoSans-Bold',
-        color: "#000000"
+        fontSize: 24,
+        fontFamily: 'Montserrat-SemiBold',
+        color: "#000000",
+        marginTop: 14
     },
     profilePicture:
     {
         marginLeft: 10,
-        marginTop: 10,
-        width: 180,
-        height: 180
+        marginTop: '4%',
+        width: 200,
+        height: 200,
+        borderRadius: 100
     },
     profileData:
     {
-        fontSize: 20,
-        fontFamily: 'NunitoSans-Bold',
+        fontSize: 17,
+        fontFamily: 'Montserrat-SemiBold',
         color: "#000000",
-        marginLeft: 10
+        marginLeft: '10%',
     },
     profileInput:
     {
         fontSize: 20,
-        fontFamily: 'NunitoSans-Regular'
+        fontFamily: 'NunitoSans-Regular',
+        marginRight: 0
     },
     profileRow:
     {
         flexDirection: 'row',
+        marginLeft: 10,
     },
     heightInput:
     {
@@ -212,5 +228,5 @@ const styles =
         fontSize: 20,
         fontFamily: 'NunitoSans-Regular',
         width: 40
-    }
+    },
 }
