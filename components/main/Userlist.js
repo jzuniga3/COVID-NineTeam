@@ -54,8 +54,10 @@ export default function Userlist()
                         <View style = {styles.profileData}>
                             <TouchableOpacity onPress = {() => togglePopup(item)}>
                                 <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
-                                <Text style= {styles.name}>{item.first_name + " " + item.last_name}</Text>
-                                <Text style = {styles.purposeText}>I want to {item.purpose} weight!{'\n'}</Text>
+                                <View style={{ alignItems: 'center'}}>
+                                    <Text style= {styles.name}>{item.first_name + " " + item.last_name}</Text>
+                                    <Text style = {styles.purposeText}>I want to {item.purpose} weight!{'\n'}</Text>
+                                </View>
                             </TouchableOpacity>
                         </View>}
                     />
@@ -101,7 +103,9 @@ const styles =
         marginLeft: 10,
         marginTop: 10,
         width: 180,
-        height: 180
+        height: 180,
+        borderRadius: 100,
+        elevation: 12
     },
     outerScreen: 
     {
@@ -124,14 +128,16 @@ const styles =
     },
     innerScreen:
     {
-        height: '80%',
-        width: '80%',
-        backgroundColor: "#FFFFFF"
+        height: '95%',
+        width: '95%',
+        backgroundColor: "#FFFFFF",
+        borderRadius: 0
     },
     profileData:
     {
         borderWidth: 0.25,
-        borderColor: "#D3D3D3"
+        borderColor: "#D3D3D3",
+        alignItems: 'center'
     },
     center: 
     {
