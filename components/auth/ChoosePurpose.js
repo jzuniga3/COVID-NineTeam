@@ -13,7 +13,8 @@ export default class CreateProfile extends Component {
         {
             email: this.props.route.params.email,
             password: this.props.route.params.password,
-            name: this.props.route.params.name,
+            first_name: this.props.route.params.first_name,
+            last_name: this.props.route.params.last_name,
             sex: this.props.route.params.sex,
             age: this.props.route.params.age,
             feet: this.props.route.params.feet,
@@ -29,14 +30,15 @@ export default class CreateProfile extends Component {
     //TODO: process codes for errors and display to user
     onSignUp = () => 
     {
-        const { name, sex, age, feet, inches, weight, bmi, purpose } = this.state;
+        const { first_name, last_name, sex, age, feet, inches, weight, bmi, purpose } = this.state;
 
         fire.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).then((result) => 
         {
             fire.firestore().collection("users")
             .doc(fire.auth().currentUser.uid)
             .set({
-                name,
+                first_name,
+                last_name,
                 sex,
                 age,
                 feet,

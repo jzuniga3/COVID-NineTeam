@@ -70,8 +70,8 @@ const styles =
     {
         marginLeft: 10,
         marginTop: 10,
-        width: '180px',
-        height: '180px'
+        width: 180,
+        height: 180
     },
     outerScreen: 
     {

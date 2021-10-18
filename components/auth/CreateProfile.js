@@ -15,8 +15,8 @@ export default class CreateProfile extends Component {
 
         this.state = 
         {
-            // email: this.props.route.params.email,
-            // password: this.props.route.params.password,
+            email: this.props.route.params.email,
+            password: this.props.route.params.password,
             first_name: '',
             last_name: '',
             sex: '',
@@ -124,7 +124,7 @@ export default class CreateProfile extends Component {
                             <KeyboardAwareScrollView
                                 resetScrollToCoords={{ x: 0, y: 0 }}
                                 scrollEnabled={false}
-                                contentContainerStyle={ Platform.OS === "ios" ? styles.ios : {} }
+                                // contentContainerStyle={ Platform.OS === "ios" ? styles.ios : {} }
                                 >
                                 <Text style={{
                                     color: '#FFF',
@@ -191,38 +191,6 @@ export default class CreateProfile extends Component {
                                             onChangeText={weight => this.setState({ weight })}>
                                         Pounds</AuthTextInput>
                                     </View>
-                                    {/* <TextInput
-                                        style = {styles.inputLabel}
-                                        placeholder="age"
-                                        mode = "outlined"
-                                        keyboardType = 'number-pad'
-                                        returnKeyType = 'done'
-                                        onChangeText={age => this.setState({ age })}
-                                    />
-                                    <TextInput
-                                        style = {styles.inputLabel}
-                                        placeholder="height in feet"
-                                        mode = "outlined"
-                                        returnKeyType = 'done'
-                                        keyboardType = 'number-pad'
-                                        onChangeText={feet => this.setState({ feet })}
-                                    />
-                                    <TextInput
-                                        style = {styles.inputLabel}
-                                        placeholder="height in inches"
-                                        mode = "outlined"
-                                        returnKeyType = 'done'
-                                        keyboardType = 'number-pad'
-                                        onChangeText={inches => this.setState({ inches })}
-                                    />
-                                    <TextInput
-                                        style = {styles.inputLabel}
-                                        placeholder="weight"
-                                        mode = "outlined"
-                                        returnKeyType = 'done'
-                                        keyboardType = 'numeric'
-                                        onChangeText={weight => this.setState({ weight })}
-                                    /> */}
                                     <TouchableOpacity onPress={() => this.validateNumbers()}>
                                         <Text style={{
                                             color: '#FFF',

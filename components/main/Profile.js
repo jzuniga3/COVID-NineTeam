@@ -14,7 +14,8 @@ const handleLogout = () =>
 
 export default function Profile()
 {    
-    const [name, setName] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [sex, setSex] = useState("");
     const [age, setAge] = useState("");
     const [weight, setWeight] = useState("");
@@ -32,7 +33,8 @@ export default function Profile()
     {
         usersDB.doc(userID).update(
         {
-            name: name,
+            first_name: firstName,
+            last_name: lastName,
             age: age,
             feet: feet,
             inches: inches,
@@ -48,7 +50,8 @@ export default function Profile()
     {
         usersDB.doc(userID).get().then((snapshot => 
         {
-            setName(snapshot.data().name)
+            setFirstName(snapshot.data().first_name)
+            setLastName(snapshot.data().last_name)
             setSex(snapshot.data().sex)
             setAge(snapshot.data().age)
             setWeight(snapshot.data().weight)
@@ -78,9 +81,15 @@ export default function Profile()
                 <View style = {styles.profileRow}>
                 <Text style = {styles.profileData}>Name:  </Text><TextInput 
                     style = {styles.profileInput}
-                    placeholder = {name.toString()}
+                    placeholder = {firstName.toString() + " "}
                     returnKeyType = 'done'
-                    onChangeText = {newName => setName(newName)}
+                    onChangeText = {newFirstName => setFirstName(newFirstName)}
+                />
+                <TextInput 
+                    style = {styles.profileInput}
+                    placeholder = {lastName.toString()}
+                    returnKeyType = 'done'
+                    onChangeText = {newLastName => setLastName(newLastName)}
                 />
                 </View>
 
@@ -173,8 +182,8 @@ const styles =
     {
         marginLeft: 10,
         marginTop: 10,
-        width: '180px',
-        height: '180px'
+        width: 180,
+        height: 180
     },
     profileData:
     {
