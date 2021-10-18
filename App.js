@@ -102,10 +102,12 @@ export default class App extends Component {
     if(!loggedIn) {
     return (
       <NavigationContainer>
-      <Stack.Navigator initialRouteName="Register">
+      <Stack.Navigator initialRouteName="CreateProfile">
         <Stack.Screen name="Register" component={RegisterScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
         <Stack.Screen name="Login" component={LoginScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
         <Stack.Screen name="CreateProfile" component={CreateProfileScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
+        <Stack.Screen name="AddContainer" component={AddScreen} navigation={this.props.navigation} options={{ headerShown: false, animationEnabled: false }}/>
+        <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
         <Stack.Screen name="ChoosePurpose" component={ChoosePurposeScreen} navigation={this.props.navigation} options={{  headerShown: false, animationEnabled: false }}/>
       </Stack.Navigator>
     </NavigationContainer>

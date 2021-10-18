@@ -1,6 +1,12 @@
+import { LinearGradient } from 'expo-linear-gradient';
 import React, { Component } from 'react'
-import { View, Button, TextInput, Image, Alert } from 'react-native'
+import { View, Text, TextInput, Image, Alert, TouchableOpacity, Platform } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import colors from '../../assets/colors/colors';
+import styles from '../../assets/styles/styles';
+import AuthTextInput from '../AuthTextInput';
 
 export default class CreateProfile extends Component {
 
@@ -9,9 +15,10 @@ export default class CreateProfile extends Component {
 
         this.state = 
         {
-            email: this.props.route.params.email,
-            password: this.props.route.params.password,
-            name: '',
+            // email: this.props.route.params.email,
+            // password: this.props.route.params.password,
+            first_name: '',
+            last_name: '',
             sex: '',
             age: '',
             feet: '',
@@ -24,11 +31,11 @@ export default class CreateProfile extends Component {
     //TODO: process codes for errors and display to user
     onCreateProfile = () => 
     {
-        const { email, password, name, sex, age, feet, inches, weight } = this.state;
+        const { email, password, first_name, last_name, sex, age, feet, inches, weight } = this.state;
 
         var bmiCalc = this.calcBMI();
 
-        this.props.navigation.navigate("ChoosePurpose", {email: email, password: password, name: name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc});
+        this.props.navigation.navigate("ChoosePurpose", {email: email, password: password, first_name: first_name, last_name: last_name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc});
     }
 
     // calcBMI = () => 
@@ -54,12 +61,12 @@ export default class CreateProfile extends Component {
 
     validateNumbers = () =>
     {
-        const { name, sex, age, feet, inches, weight } = this.state;
+        const { first_name, last_name, sex, age, feet, inches, weight } = this.state;
         var errorMsg = 'Invalid fields:';
         var isError = false;
 
         //Check if name is empty
-        if (name == '')
+        if (first_name == '' || last_name =='')
         {
             errorMsg += '\nName';
             isError = true;
@@ -107,152 +114,131 @@ export default class CreateProfile extends Component {
         const { navigate } = this.props.navigation;
 
         return (
-                
-            <View style = {styles.contentCenter}>
-            <Image style = {styles.loginImage} source = {require("../../assets/icon.png")}/>
-                <View style = {styles.loginPrompt}>      
-                    <TextInput
-                        style = {styles.inputLabel}
-                        placeholder="name"
-                        mode = "outlined"
-                        returnKeyType = 'done'
-                        onChangeText={name => this.setState({ name })}
-                    />
-                    <RNPickerSelect
-                        style = {{backgroundColor: 'white'}}
-                        placeholder = {{label:'Select your sex...', value: ''}}
-                        items = {[{label: 'Male', value: 'male'}, {label: 'Female', value: 'female'}]}
-                        onValueChange={sex => this.setState({ sex })}
-                        returnKeyType = 'done'
-                    />
-                    <TextInput
-                        style = {styles.inputLabel}
-                        placeholder="age"
-                        mode = "outlined"
-                        keyboardType = 'number-pad'
-                        returnKeyType = 'done'
-                        onChangeText={age => this.setState({ age })}
-                    />
-                    <TextInput
-                        style = {styles.inputLabel}
-                        placeholder="height in feet"
-                        mode = "outlined"
-                        returnKeyType = 'done'
-                        keyboardType = 'number-pad'
-                        onChangeText={feet => this.setState({ feet })}
-                    />
-                    <TextInput
-                        style = {styles.inputLabel}
-                        placeholder="height in inches"
-                        mode = "outlined"
-                        returnKeyType = 'done'
-                        keyboardType = 'number-pad'
-                        onChangeText={inches => this.setState({ inches })}
-                    />
-                    <TextInput
-                        style = {styles.inputLabel}
-                        placeholder="weight"
-                        mode = "outlined"
-                        returnKeyType = 'done'
-                        keyboardType = 'numeric'
-                        onChangeText={weight => this.setState({ weight })}
-                    />
-
-                    <Button
-                        onPress={() => this.validateNumbers()}
-                        title="Register"
-                    />
-                
+            <View style={styles.container}>
+                    <LinearGradient
+                    // Background Linear Gradient
+                    colors={[colors.lightBlue, colors.darkBlue]}
+                    style={styles.background}
+                    >
+                        <SafeAreaView>
+                            <KeyboardAwareScrollView
+                                resetScrollToCoords={{ x: 0, y: 0 }}
+                                scrollEnabled={false}
+                                contentContainerStyle={ Platform.OS === "ios" ? styles.ios : {} }
+                                >
+                                <Text style={{
+                                    color: '#FFF',
+                                    fontSize: 16,
+                                    fontFamily: 'Montserrat-SemiBold',
+                                    marginLeft: '30%',
+                                    marginBottom: '7%'
+                                }}>Profile Information</Text>
+                                <View style={{ alignItems: 'center'}}>
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate("AddContainer")}>
+                                        <Image 
+                                        source={require('../../assets/images/default_profile.jpg')}
+                                        style={styles.DefaultProfile}
+                                        />
+                                    </TouchableOpacity>
+                                </View>
+                                <View style = {styles.loginPrompt}>      
+                                    <View style={styles.AuthTextInputRow}>
+                                        <AuthTextInput 
+                                            style = {styles.AuthTextInputContainerSmall}
+                                            onChangeText={first_name => this.setState({ first_name })}>
+                                        First</AuthTextInput>
+                                        <AuthTextInput 
+                                            style = {styles.AuthTextInputContainerSmall}
+                                            onChangeText={last_name => this.setState({ last_name })}>
+                                        Last</AuthTextInput>
+                                    </View>
+                                    
+                                    <View style={styles.AuthTextInputRow}>
+                                        <View style={styles.AuthTextInputContainerSmall}>
+                                            <Text style={styles.AuthTextInputText}>Sex</Text>
+                                            <RNPickerSelect
+                                            style = {styles.AuthTextInputContainerSmall}
+                                            // placeholder = {{label:'Select your sex...', value: ''}}
+                                            items = {[{label: 'Male', value: 'male'}, {label: 'Female', value: 'female'}]}
+                                            onValueChange={sex => this.setState({ sex })}
+                                            returnKeyType = 'done'
+                                            />
+                                        </View>
+                                        <AuthTextInput 
+                                                style = {styles.AuthTextInputContainerSmall}
+                                                onChangeText={age => this.setState({ age })}>
+                                        Age</AuthTextInput>
+                                    </View >
+                                    
+                                    <Text style={styles.textRegularHeading}>Height</Text>
+                                    <View style={styles.AuthTextInputRow}>
+                                        
+                                        <View style={styles.AuthTextInputRow}>
+                                            <AuthTextInput 
+                                                style = {styles.AuthTextInputContainerSmall}
+                                                onChangeText={feet => this.setState({ feet })}>
+                                            Feet</AuthTextInput>
+                                            <AuthTextInput 
+                                                style = {styles.AuthTextInputContainerSmall}
+                                                onChangeText={inches => this.setState({ inches })}>
+                                            Inches</AuthTextInput>
+                                        </View>
+                                    </View>
+                                    <Text style={styles.textRegularHeading}>Weight</Text>
+                                    <View style={styles.AuthTextInputRow}>
+                                        <AuthTextInput 
+                                            style = {styles.AuthTextInputContainerSmall}
+                                            onChangeText={weight => this.setState({ weight })}>
+                                        Pounds</AuthTextInput>
+                                    </View>
+                                    {/* <TextInput
+                                        style = {styles.inputLabel}
+                                        placeholder="age"
+                                        mode = "outlined"
+                                        keyboardType = 'number-pad'
+                                        returnKeyType = 'done'
+                                        onChangeText={age => this.setState({ age })}
+                                    />
+                                    <TextInput
+                                        style = {styles.inputLabel}
+                                        placeholder="height in feet"
+                                        mode = "outlined"
+                                        returnKeyType = 'done'
+                                        keyboardType = 'number-pad'
+                                        onChangeText={feet => this.setState({ feet })}
+                                    />
+                                    <TextInput
+                                        style = {styles.inputLabel}
+                                        placeholder="height in inches"
+                                        mode = "outlined"
+                                        returnKeyType = 'done'
+                                        keyboardType = 'number-pad'
+                                        onChangeText={inches => this.setState({ inches })}
+                                    />
+                                    <TextInput
+                                        style = {styles.inputLabel}
+                                        placeholder="weight"
+                                        mode = "outlined"
+                                        returnKeyType = 'done'
+                                        keyboardType = 'numeric'
+                                        onChangeText={weight => this.setState({ weight })}
+                                    /> */}
+                                    <TouchableOpacity onPress={() => this.validateNumbers()}>
+                                        <Text style={{
+                                            color: '#FFF',
+                                            fontSize: 16,
+                                            fontFamily: 'Montserrat-SemiBold',
+                                            marginLeft: '40%',
+                                            marginTop: '32%'
+                                        }}>Continue</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </KeyboardAwareScrollView>
+                        </SafeAreaView>
+                    </LinearGradient>
                 </View>
-            </View>
+            
         )
     }
 }
 
-const styles = 
-{
-    loginPrompt:
-    {
-        marginTop: 30,
-        marginLeft: 24,
-        marginRight: 24,
-        marginBottom: 70
-    },
-    loginImage:
-    {
-        width: 250,
-        height: 250,
-        marginLeft: 20,
-        marginTop: 30,
-        marginBottom: 30,
-    },
-    inputLabel:
-    {
-        width: 280,
-        height: 45,
-        borderColor: "#43519D",
-        backgroundColor: "#FFFFFF"
-    },
-    userLabel:
-    {
-        fontSize: 20,
-        color: "#414E93"
-    },
-    contentCenter:
-    {
-        height: '100%',
-        backgroundColor: "#192879",
-        alignItems: 'center'
-    },
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-    background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: '100%'
-    },
-    logo: {
-        width: 163,
-        height: 161,
-        paddingTop: '5%'
-    },
-    headerText: {
-        fontSize: 22,
-        color: '#FFF',
-        fontFamily: 'NunitoSans-Bold',
-        paddingHorizontal: 51,
-        marginBottom: 7
-    },
-    footerText: {
-        flexDirection: 'row', 
-        justifyContent: 'flex-end',
-        marginRight: 37,
-    },
-    textBold: {
-        color: '#FFF',
-        fontFamily: 'NunitoSans-Bold',
-        fontSize: 14
-    },
-    textRegular: {
-        color: '#FFF',
-        fontFamily: 'NunitoSans-Regular',
-        fontSize: 14
-
-    },
-    button: {
-        color: '#FFF',
-        fontSize: 16,
-        fontFamily: 'Montserrat-SemiBold',
-        marginLeft: '35%',
-        marginTop: '32%'
-    },
-    ios: {
-        height: '100%', 
-        width: '100%' 
-    }
-}
