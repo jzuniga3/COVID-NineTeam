@@ -129,7 +129,7 @@ const styles =
     innerScreen:
     {
         height: '95%',
-        width: '95%',
+        width: '100%',
         backgroundColor: "#FFFFFF",
         borderRadius: 0
     },

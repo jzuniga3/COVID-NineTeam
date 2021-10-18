@@ -4,6 +4,8 @@ import { StatusBar } from 'expo-status-bar'
 import fire from '../fire'
 import { Text, View, Button, TextInput, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { LinearGradient } from 'expo-linear-gradient'
+import colors from '../../assets/colors/colors'
 
 export default function Feed() 
 {
@@ -106,9 +108,10 @@ const calculateLoseCalories = () =>
       
 */   
     return (
+        <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
         <SafeAreaView style = {styles.contentCenter}>
             <StatusBar barStyle='light-content' />
-            <Text>Feed</Text>
+            <Text style={styles.pageHeader}>Feed</Text>
             <View style = {styles.feedScreen}>
 
 
@@ -180,6 +183,7 @@ const calculateLoseCalories = () =>
                 
             </View>
         </SafeAreaView>
+        </LinearGradient>
     );
 }   
 
@@ -188,13 +192,12 @@ const styles =
     contentCenter:
     {
         height: '100%',
-        backgroundColor: "#192879",
         alignItems: 'center'
     },
     feedScreen:
     {
-        height: '80%',
-        width: '80%',
+        height: '100%',
+        width: '100%',
         backgroundColor: "#FFFFFF"
     },
     feedData:
@@ -214,6 +217,20 @@ const styles =
     {
         fontSize: 20,
         width: 200
-    }
+    },
+    outerScreen: 
+    {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        height: '100%'
+    },
+    pageHeader:
+    {
+        fontSize: 30,
+        fontFamily: 'NunitoSans-Bold',
+        color: '#000000'
+    },
 
 }
