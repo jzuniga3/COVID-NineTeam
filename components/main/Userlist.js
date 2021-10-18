@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 import fire from '../fire'
-import { Text, View, FlatList, Image } from 'react-native'
+import { Text, View, FlatList, Image, TouchableOpacity, Modal } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../../assets/colors/colors';
@@ -9,8 +9,10 @@ import colors from '../../assets/colors/colors';
 export default function Userlist()
 {    
     const [userList, setUserList] = useState(null);
-    const usersDB = fire.firestore().collection('users')
+    const usersDB = fire.firestore().collection('users');
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupItem, setPopupItem] = useState(null);
 
     //Get user information from firestore
     const getUsers = () =>
@@ -22,6 +24,16 @@ export default function Userlist()
         }).catch(function(error) {console.log('Error getting documents: ', error)})
 
         setUserDataIsRetrieved(true);
+    }
+
+    const togglePopup = (item) =>
+    {
+        setPopupOpen(!popupOpen)
+
+        if (item != null)
+        {
+            setPopupItem(item);
+        }
     }
 
     if (userDataIsRetrieved == false)
@@ -40,13 +52,29 @@ export default function Userlist()
                     data={userList}
                     renderItem={({item}) => 
                         <View style = {styles.profileData}>
-                            <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
-                            <Text style= {styles.name}>{item.name}</Text>
-                            <Text style = {styles.purposeText}>I want to {item.purpose} weight!{'\n'}</Text>
+                            <TouchableOpacity onPress = {() => togglePopup(item)}>
+                                <Image source={{uri: item.profilePicId}} style={styles.profilePicture}/>
+                                <Text style= {styles.name}>{item.name}</Text>
+                                <Text style = {styles.purposeText}>I want to {item.purpose} weight!{'\n'}</Text>
+                            </TouchableOpacity>
                         </View>}
                     />
                 }
-          </View>
+
+                {popupItem != null &&
+                <Modal animationType = 'none' visible = {popupOpen} transparent = {true}>
+                    <View style = {styles.center}>
+                        <View style = {styles.modalBody}>
+                            <TouchableOpacity style = {styles.xbutton} onPress = {() => togglePopup(null)}>X</TouchableOpacity>
+                            <Text>{popupItem.name}</Text>
+                            <Text>{popupItem.sex}</Text>
+                            <Text>{popupItem.feet}' {popupItem.inches}"</Text>
+                            <Text>{popupItem.weight}lbs</Text>
+                            <Text>{popupItem.bmi}</Text>
+                        </View>
+                    </View>
+                </Modal>}
+            </View>
         </SafeAreaView>
         </LinearGradient>
     );
@@ -103,4 +131,35 @@ const styles =
         borderWidth: 0.25,
         borderColor: "#D3D3D3"
     },
+    center: 
+    {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 20
+    },
+    modalBody: 
+    {
+        backgroundColor: '#F8F8FF',
+        borderRadius: 10,
+        width: '500px',
+        height: '300px',
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: 
+        {
+          width: 2,
+          height: 3
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+    },
+    xbutton:
+    {
+        position: 'absolute',
+        right: '20px',
+        top: '10px',
+        fontSize: 30,
+        opacity: 0.3
+    }
 }
