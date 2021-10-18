@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 import fire from '../fire'
-import { Text, View, FlatList, Image, TouchableOpacity, Modal } from 'react-native'
+import { Text, View, FlatList, Image, Modal, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from '../../assets/colors/colors';
@@ -65,7 +65,9 @@ export default function Userlist()
                 <Modal animationType = 'none' visible = {popupOpen} transparent = {true}>
                     <View style = {styles.center}>
                         <View style = {styles.modalBody}>
-                            <TouchableOpacity style = {styles.xbutton} onPress = {() => togglePopup(null)}>X</TouchableOpacity>
+                            <TouchableOpacity onPress = {() => togglePopup(null)}>
+                                <Text style = {styles.xbutton}>X</Text>
+                            </TouchableOpacity>
                             <Text>{popupItem.first_name}</Text>
                             <Text>{popupItem.sex}</Text>
                             <Text>{popupItem.feet}' {popupItem.inches}"</Text>
@@ -113,7 +115,7 @@ const styles =
     {
         fontSize: 30,
         fontFamily: 'NunitoSans-Bold',
-        color: "#000000"
+        color: '#000000'
     },
     contentCenter:
     {
@@ -142,8 +144,8 @@ const styles =
     {
         backgroundColor: '#F8F8FF',
         borderRadius: 10,
-        width: '500px',
-        height: '300px',
+        width: 500,
+        height: 300,
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: 
@@ -152,13 +154,12 @@ const styles =
           height: 3
         },
         shadowOpacity: 0.5,
-        shadowRadius: 4,
+        shadowRadius: 4
     },
     xbutton:
     {
-        position: 'absolute',
-        right: '20px',
-        top: '10px',
+        marginTop: 10,
+        marginLeft: 290,
         fontSize: 30,
         opacity: 0.3
     }
