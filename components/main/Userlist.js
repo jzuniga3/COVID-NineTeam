@@ -150,17 +150,18 @@ const styles =
     {
         backgroundColor: '#F8F8FF',
         borderRadius: 10,
-        width: 500,
-        height: 300,
+        width: '100%',
+        height: '40%',
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: 
         {
-          width: 2,
+          width: 20,
           height: 3
         },
         shadowOpacity: 0.5,
-        shadowRadius: 4
+        shadowRadius: 4,
+        elevation: 40
     },
     xbutton:
     {
