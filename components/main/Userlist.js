@@ -105,7 +105,6 @@ const styles =
         width: 180,
         height: 180,
         borderRadius: 100,
-        elevation: 12
     },
     outerScreen: 
     {
