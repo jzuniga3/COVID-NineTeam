@@ -24,6 +24,7 @@ import SaveScreen from './components/main/Save'
 import ChoosePurposeScreen from './components/auth/ChoosePurpose'
 
 import * as Font from 'expo-font'
+import { ActivityIndicator } from 'react-native-paper';
 
 // Stack to handle navigation
 const Stack = createStackNavigator();
@@ -93,7 +94,7 @@ export default class App extends Component {
     if(!loaded || !this.state.fontsLoaded) {
       return(
         <View style={{ flex: 1, justifyContent: 'center'}}>
-          <Text>Loading...</Text>
+          <ActivityIndicator size="large"></ActivityIndicator>
         </View>
       )
     }
