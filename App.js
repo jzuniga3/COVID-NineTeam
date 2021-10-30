@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler'
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, LogBox } from 'react-native';
+import { StyleSheet, Text, View, LogBox, Platform } from 'react-native';
 import LottieView from 'lottie-react-native'
 
 
@@ -92,8 +92,12 @@ export default class App extends Component {
 
     // if not loaded display loading screen
     if(!loaded || !this.state.fontsLoaded) {
+      if(Platform.OS == 'web') {
+      return <ActivityIndicator size="large" style={{ flex: 1 , justifyContent: 'center'}}/>
+      }
       return <LottieView source={require('./assets/animations/loading.json')} autoPlay loop />;
     }
+    
 
     // if not logged in display navigation container
     if(!loggedIn) {
