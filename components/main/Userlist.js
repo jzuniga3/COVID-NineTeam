@@ -9,10 +9,15 @@ import colors from '../../assets/colors/colors';
 export default function Userlist()
 {    
     const [userList, setUserList] = useState(null);
+    const [splitUserList, setSplitUserList] = useState(null);
     const usersDB = fire.firestore().collection('users');
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupItem, setPopupItem] = useState(null);
+
+    const [startIndex, setStartIndex] = useState(5);
+    const [endIndex, setEndIndex] = useState(10);
+
 
     //Get user information from firestore
     const getUsers = () =>
@@ -21,6 +26,7 @@ export default function Userlist()
         {
             let userData = querySnapshot.docs.map(doc => doc.data())
             setUserList(userData)
+            setSplitUserList(userData.slice(0, 5))
         }).catch(function(error) {console.log('Error getting documents: ', error)})
 
         setUserDataIsRetrieved(true);
@@ -36,6 +42,13 @@ export default function Userlist()
         }
     }
 
+    const continueList = (start, end) =>
+    {
+        setSplitUserList(splitUserList.concat(userList.slice(start, end)));
+        setStartIndex(startIndex + 5);
+        setEndIndex(endIndex + 5);
+    }
+
     if (userDataIsRetrieved == false)
     {
         getUsers();
@@ -47,9 +60,9 @@ export default function Userlist()
             <StatusBar barStyle='light-content' />
             <Text style = {styles.pageHeader}>List of Users</Text>
             <View style = {styles.innerScreen}>
-                {userList != null &&
+                {splitUserList != null &&
                     <FlatList
-                    data={userList}
+                    data={splitUserList}
                     renderItem={({item}) => 
                         <View style = {styles.profileData}>
                             <TouchableOpacity onPress = {() => togglePopup(item)}>
@@ -60,6 +73,8 @@ export default function Userlist()
                                 </View>
                             </TouchableOpacity>
                         </View>}
+                    onEndReached = {() => continueList(startIndex, endIndex)}
+                    onEndReachedThreshold = {1}
                     />
                 }
 
