@@ -10,12 +10,14 @@ import profileStyles from '../../assets/styles/profileStyles'
 
 const handleLogout = () => 
 {
-    fire.auth().signOut()
-    // location.reload(); 
+    fire.auth().signOut();
 }
 
 export default function Profile()
 {    
+    const usersDB = fire.firestore().collection('users')
+    const userID = fire.auth().currentUser.uid
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [sex, setSex] = useState("");
@@ -28,23 +30,80 @@ export default function Profile()
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
     const [purpose, setPurpose] = useState("");
 
-    const usersDB = fire.firestore().collection('users')
-    const userID = fire.auth().currentUser.uid
+    //for profile editing. hooks update too slowly.
+    let newFirstName = firstName;
+    let newLastName = lastName;
+    let newAge = age;
+    let newWeight = weight;
+    let newFeet = feet;
+    let newInches = inches;
+
+    function validateProfileEdits()
+    {
+        if (userDataIsRetrieved)
+        {
+            let errorMsg = 'Invalid fields:';
+            let isError = false;
+
+            //Check if name is empty
+            if (newFirstName == '' || newLastName =='')
+            {
+                errorMsg += '\nName';
+                isError = true;
+            }
+            //Check if age is valid
+            if (newAge == '' || isNaN(newAge) || newAge < 1 || newAge > 120)
+            {
+                errorMsg += '\nAge';
+                isError = true;
+            }
+            //Check if height is valid
+            if (newInches == '' || isNaN(newInches) || newInches < 0 || newInches > 11 || newFeet == '' || isNaN(newFeet) || newFeet < 0 || newFeet > 10)
+            {
+                errorMsg += '\nHeight';
+                isError = true;
+            }
+            //Check if weight is valid
+            if (newWeight == '' || isNaN(newWeight) || newWeight < 0 || newWeight > 1500)
+            {
+                errorMsg += '\nWeight';
+                isError = true;
+            }
+
+            //If an error was detected.
+            if (isError == true)
+            {
+                alert(errorMsg);
+                isError = false;
+            }
+            //If everything is valid
+            else
+            {
+                updateProfile();
+            }
+        }
+    }
 
     const updateProfile = () =>
     {
-        usersDB.doc(userID).update(
-        {
-            first_name: firstName,
-            last_name: lastName,
-            age: age,
-            feet: feet,
-            inches: inches,
-            weight: weight,
-            purpose: purpose
-        })
+        usersDB.doc(userID).update({
+            first_name: newFirstName,
+            last_name: newLastName,
+            age: newAge,
+            feet: newFeet,
+            inches: newInches,
+            weight: newWeight,
+            bmi: calcBMI()
+            })
 
         setUserDataIsRetrieved(false);
+    }
+
+    const calcBMI = () =>
+    {
+        let totalHeight = (feet * 12) + inches;
+
+        return (((weight / (totalHeight * totalHeight)) * 703)*100).toFixed(2)
     }
 
     //Get user information from firestore
@@ -86,13 +145,13 @@ export default function Profile()
                     style = {profileStyles.profileInput}
                     placeholder = {firstName.toString() + " "}
                     returnKeyType = 'done'
-                    onChangeText = {newFirstName => setFirstName(newFirstName)}
+                    onChangeText = {editedFirstName => newFirstName = editedFirstName}
                 />
                 <TextInput 
                     style = {profileStyles.profileInput}
                     placeholder = {lastName.toString()}
                     returnKeyType = 'done'
-                    onChangeText = {newLastName => setLastName(newLastName)}
+                    onChangeText = {editedLastName => newLastName = editedLastName}
                 />
                 </View>
 
@@ -101,7 +160,7 @@ export default function Profile()
                     style = {profileStyles.profileInput}
                     placeholder = { age.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newAge => setAge(newAge)}
+                    onChangeText = {editedAge => newAge = editedAge}
                 />
                 </View>
 
@@ -110,14 +169,14 @@ export default function Profile()
                     style = {profileStyles.heightInput}
                     placeholder = { feet.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newFeet => setFeet(newFeet)}
+                    onChangeText = {editedFeet => newFeet = editedFeet}
                 />
                 <Text style = {{fontSize: 17, fontFamily: 'Montserrat-SemiBold', color: "#000000",}}>'  </Text>
                 <TextInput 
                     style = {profileStyles.heightInput}
                     placeholder = { inches.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newInches => setInches(newInches)}
+                    onChangeText = {editedInches => newInches = editedInches}
                 />
                 <Text style = {{fontSize: 17, fontFamily: 'Montserrat-SemiBold', color: "#000000",}}>"</Text>
                 </View>
@@ -127,7 +186,7 @@ export default function Profile()
                     style = {profileStyles.weightInput}
                     placeholder = { weight.toString() }
                     returnKeyType = 'done'
-                    onChangeText = {newWeight => setWeight(newWeight)}
+                    onChangeText = {editedWeight => newWeight = editedWeight}
                 />
                 <Text style = {profileStyles.profileInput}> lbs</Text>
                 </View>
@@ -143,7 +202,7 @@ export default function Profile()
                 <Button
                     style = {profileStyles.profileButton}
                     title = 'Save changes'
-                    onPress = {updateProfile}
+                    onPress = {() => validateProfileEdits()}
                 />
                 <Button
                     style = {profileStyles.profileButton}
