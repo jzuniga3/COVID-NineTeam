@@ -33,7 +33,7 @@ export default class CreateProfile extends Component {
     {
         const { email, password, first_name, last_name, sex, age, feet, inches, weight } = this.state;
 
-        var bmiCalc = this.calcBMI();
+        let bmiCalc = this.calcBMI();
 
         this.props.navigation.navigate("ChoosePurpose", {email: email, password: password, first_name: first_name, last_name: last_name, sex: sex, age: age, feet: feet, inches: inches, weight: weight, bmi: bmiCalc});
     }
@@ -53,7 +53,7 @@ export default class CreateProfile extends Component {
     // }
     calcBMI =() =>
     {
-        var totalHeight = (this.state.feet * 12) + this.state.inches;
+        let totalHeight = (this.state.feet * 12) + this.state.inches;
 
         return (((this.state.weight / (totalHeight * totalHeight)) * 703)*100).toFixed(2)
     }
@@ -62,8 +62,8 @@ export default class CreateProfile extends Component {
     validateNumbers = () =>
     {
         const { first_name, last_name, sex, age, feet, inches, weight } = this.state;
-        var errorMsg = 'Invalid fields:';
-        var isError = false;
+        let errorMsg = 'Invalid fields:';
+        let isError = false;
 
         //Check if name is empty
         if (first_name == '' || last_name =='')
