@@ -1,8 +1,8 @@
 import React, { useState, useEffect }  from "react";
-import {Text, View, StyleSheet, TouchableOpacity,Dimensions} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Dimensions, Button} from "react-native";
 import {BarCodeScanner} from "expo-barcode-scanner";
-import {sendApiRequest} from "./Edamam";
-import styles from './globalstyles.js';
+import {sendApiRequest} from "../screens/old/Edamam";
+import styles from '../screens/old/globalstyles.js';
 import fire from './fire';
 
 

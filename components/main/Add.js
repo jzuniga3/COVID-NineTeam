@@ -82,8 +82,13 @@ export default function Add({ navigation }) {
         }}>
       </Button>
 
-      <Button title="Take Picture" onPress={() => takePicture()}/>
-      <Button title="From Gallery" onPress={() => pickImage()}/>
+      <View style={{ flexDirection: 'row'}}>
+
+        //TODO: fix button styling
+        <Button title="Take Picture" style={styles.buttonStyle} onPress={() => takePicture()}/>
+        <Button title="From Gallery" style={styles.buttonStyle} onPress={() => pickImage()}/>
+        <Button title="Barcode" style={styles.buttonStyle} onPress={() => navigation.navigate('BarcodeScreen')}/>
+      </View>
       {/* <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/> */}
       </View>
       {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
@@ -99,5 +104,8 @@ const styles = StyleSheet.create({
   fixedRatio: {
     flex: 1,
     aspectRatio: 2 / 3
+  },
+  buttonStyle: {
+    width: '25%'
   }
 })

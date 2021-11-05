@@ -23,6 +23,7 @@ import MainScreen from './components/Main';
 import AddScreen from './components/main/Add';
 import SaveScreen from './components/main/Save'
 import ChoosePurposeScreen from './components/auth/ChoosePurpose'
+import BarcodeScreen from './components/BarcodeScreen'
 
 import * as Font from 'expo-font'
 import { ActivityIndicator } from 'react-native-paper';
@@ -134,6 +135,7 @@ export default class App extends Component {
           <Stack.Screen name="Main" component={MainScreen} options={{ headerShown: false, animationEnabled: false}}/>
           <Stack.Screen name="AddContainer" component={AddScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
           <Stack.Screen name="Save" component={SaveScreen} navigation={this.props.navigation} options={{ headerBackTitle: "Back", animationEnabled: false }}/>
+          <Stack.Screen name="BarcodeScreen" component={BarcodeScreen} navigation={this.props.navigation} options={{ headerShown: true, headerBackTitle: "Back", animationEnabled: false }}/>
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
