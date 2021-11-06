@@ -12,101 +12,136 @@ export default function Feed()
     //calorie log  
     ///** lookup how to take collections in firebase   make new collection under current user then start current collect. 
     // can a sub collection run under each user where they can enter their calories and it log (name,date,calories)
-   const [dailyCalories, setDailyCalories] = useState("");
-   var today = new Date();
-   var logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
+   let today = new Date();
+   let logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
 
-   var firstLoad = true;
-
-   const storage = fire.storage().ref();
-
-   const calorieDB = fire.firestore().collection('calories')
    const usersDB = fire.firestore().collection('users')
    const userID = fire.auth().currentUser.uid
 
-   const [name, setName] = useState("");
    const [sex, setSex] = useState("");
    const [age, setAge] = useState("");
    const [weight, setWeight] = useState("");
    const [feet, setFeet] = useState("");
    const [inches, setInches] = useState("");
+   const [purpose, setPurpose] = useState("");
+   const [dailyFood, setDailyFood] = useState("");
+   let totalHeight = ((feet * 12) + Number(inches));
+
    const [recommendedCalories, setRecommendedCalories] = useState("");
-   const [gainCalories, setGainCalories] = useState("");
-   const [loseCalories, setLoseCalories] = useState("");
+   const [purposeCalories, setPurposeCalories] = useState("");
+   const [dailyCalories, setDailyCalories] = useState("");
 
-   var totalHeight = ((feet * 12) + Number(inches));
+   const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
+   let newDailyFood = {};
+   let newFoodName = "";
+   let newFoodCalories = "";
 
-   const updateFeed = () => 
-   {
-    calorieDB.doc(userID).update(
-        {
-            calories: dailyCalories,
-            date: today
-          
-        })
-   }
-      
-   usersDB.doc(userID).get().then((snapshot => 
+    function updateFeed()
     {
-        setSex(snapshot.data().sex)
-        setWeight(snapshot.data().weight)
-        setFeet(snapshot.data().feet)
-        setInches(snapshot.data().inches)
-        setAge(snapshot.data().age)
-    }))
+    usersDB.doc(userID).update(
+        {
+            daily_food: newDailyFood
+        })
 
-//Recommended calories to maintain/gain/lose weight   
-
-//BMR 
-//Harris-Benedict Formula
-const calculateCalories = () => 
-{
-    if (sex == "male") {
-        
-        setRecommendedCalories((66 + (6.3 * weight) + Number(12.9 * totalHeight) - (6.8 * age)));
-         
-
-    } else {
-       
-        setRecommendedCalories((65 + (4.3 * weight) + Number(4.7 * totalHeight) - (4.7 * age)));
-
-
+        setUserDataIsRetrieved(false);
     }
-}
-
-
-const calculateGainCalories = () =>
-{
-    setGainCalories(recommendedCalories + 500);
-
-}
-
-
-const calculateLoseCalories = () =>
-{
-    setLoseCalories(recommendedCalories - 500);
-
-}
-
-//************************* 
-/*
-   const getUserInfo = () =>
+      
+    const getUserInfo = () =>
     {
         usersDB.doc(userID).get().then((snapshot => 
-        {
-            setDailyCalories(snapshot.data().dailyCalories)
-           // setlogDate(snapshot.data().logDate)
+            {
+                setSex(snapshot.data().sex);
+                setWeight(snapshot.data().weight);
+                setFeet(snapshot.data().feet);
+                setInches(snapshot.data().inches);
+                setAge(snapshot.data().age);
+                setPurpose(snapshot.data().purpose);
+                setDailyFood(snapshot.data().daily_food);
+        
+                setUserDataIsRetrieved(true);
 
-        }))
+                calculateCalories();
+            }))
     }
 
-    if(firstLoad == true)
+    function validateFoodInputs(name, calories)
+    {
+        let errorMsg = 'Invalid fields:';
+        let isError = false;
+
+        if (name == "")
+        {
+            errorMsg += '\nName';
+            isError = true;
+        }
+
+        if (calories == "" || calories < 0)
+        {
+            errorMsg += '\nCalories';
+            isError = true;
+        }
+
+        //If an error was detected.
+        if (isError == true)
+        {
+            alert(errorMsg);
+            isError = false;
+        }
+        //If everything is valid
+        else
+        {
+            typeNewFood(name, calories);
+        }
+    }
+
+    function typeNewFood(name, calories)
+    {
+        newDailyFood = dailyFood;
+        let id = Object.keys(dailyFood).length + 1;
+        newDailyFood[id] = {name: name, calories: calories};
+        updateFeed();
+        alert("You added: " + name);
+    }
+
+    //Recommended calories to maintain weight   
+    //BMR 
+    //Harris-Benedict Formula
+    function calculateCalories()
+    {
+        let calories = "";
+
+        if (sex == "male") 
+        {
+            calories = (66 + (6.3 * weight) + Number(12.9 * totalHeight) - (6.8 * age));
+            setRecommendedCalories(calories);
+        } 
+        else 
+        {
+            calories = (65 + (4.3 * weight) + Number(4.7 * totalHeight) - (4.7 * age))
+            setRecommendedCalories(calories);
+        }
+
+        calculatePurposeCalories(calories);
+    }
+
+    //calculates calories needed to gain or lose weight depending on user's purpose
+    function calculatePurposeCalories(calories)
+    {
+        if (purpose == "donate")
+        {
+            setPurposeCalories(calories - 500);
+        }
+        else
+        {
+            setPurposeCalories(calories + 500);
+        }   
+    }
+
+    if (userDataIsRetrieved == false)
     {
         getUserInfo();
-        firstLoad = false;
     }
-      
-*/   
+
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
         <SafeAreaView style = {styles.contentCenter}>
@@ -114,73 +149,45 @@ const calculateLoseCalories = () =>
             <Text style={styles.pageHeader}>Feed</Text>
             <View style = {styles.feedScreen}>
 
-
-
                 <View style = {styles.feedRow}>
-                <Text style = {styles.feedData}>Daily Calories:  </Text><TextInput 
-                    style = {styles.calorieInput}
-                    placeholder = { dailyCalories }
-                    returnKeyType = 'done'
-                    onChangeText = {newdailyCalories => setDailyCalories(newdailyCalories)}
-                />
+                    <Text style = {styles.feedData}>Your purpose is to {purpose} weight</Text>
                 </View>
 
                 <View style = {styles.feedRow}>
-                <Text style = {styles.feedData}>Date:  </Text><TextInput 
-                    style = {styles.dateInput}
-                    placeholder = { logDate.toString() }
-
-                />
-                </View>
-
-                
-                <Button
-                    title = 'Save changes'
-                    onPress = {updateFeed}
-                />
-                
-                
-                <Button
-                    title = 'Calculate Recommended Calories to Maintain Weight'
-                    onPress = {calculateCalories}
-                />
-                <Button
-                    title = 'Calculate Recommended Calories to Gain Weight'
-                    onPress = {calculateGainCalories}
-                />
-                <Button
-                    title = 'Calculate Recommended Calories to Lose Weight'
-                    onPress = {calculateLoseCalories}
-                />
-
-
-
-                <View style = {styles.feedRow}>
-                <Text style = {styles.feedData}>Recommended Daily Caloric Intake to Maintain:  </Text><TextInput 
-                    style = {styles.dateInput}
-                    placeholder = { recommendedCalories.toString().substring(0,4)}
-                    returnKeyType = 'done'
-                />
+                    <Text style = {styles.feedData}>Date: {logDate.toString()}</Text>
                 </View>
 
                 <View style = {styles.feedRow}>
-                <Text style = {styles.feedData}>Daily Caloric Intake to Gain:  </Text><TextInput 
-                    style = {styles.dateInput}
-                    placeholder = { gainCalories.toString().substring(0,4)}
-                    returnKeyType = 'done'
-                />
+                    <Text style = {styles.feedData}>Daily Calories to maintain weight: {Math.round(recommendedCalories)} Cal</Text>
                 </View>
 
                 <View style = {styles.feedRow}>
-                <Text style = {styles.feedData}>Daily Caloric Intake to Donate:  </Text><TextInput 
-                    style = {styles.dateInput}
-                    placeholder = { loseCalories.toString().substring(0,4)}
-                    returnKeyType = 'done'
-                />
+                    <Text style = {styles.feedData}>Daily Calories to {purpose} 1 lb: {Math.round(purposeCalories)} Cal</Text>
                 </View>
 
-                
-                
+                <View style = {styles.feedRow}>
+                    <Text style = {styles.feedData}>Current Daily Calories: </Text>
+                </View>
+
+                <View style = {styles.feedRow}>
+                    <TextInput 
+                        style = {styles.nameInput}
+                        placeholder = "Name of food"
+                        returnKeyType = 'done'
+                        onChangeText = {editedFoodName => newFoodName = editedFoodName}
+                    />
+                    <TextInput 
+                        style = {styles.calorieInput}
+                        placeholder = "Cals"
+                        returnKeyType = 'done'
+                        onChangeText = {editedFoodCalories => newFoodCalories = editedFoodCalories}
+                    />
+                    <Button
+                        title = 'Add Food'
+                        onPress = {() => validateFoodInputs(newFoodName, newFoodCalories)}
+                    />
+                </View>
+
             </View>
         </SafeAreaView>
         </LinearGradient>
@@ -213,7 +220,7 @@ const styles =
         fontSize: 20,
         width: 50
     },
-    dateInput:
+    nameInput:
     {
         fontSize: 20,
         width: 200

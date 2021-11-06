@@ -47,7 +47,8 @@ export default class CreateProfile extends Component {
                 bmi,
                 purpose,
                 profilePicId: 'https://firebasestorage.googleapis.com/v0/b/weightexchangeapplication.appspot.com/o/image%2Fdefault-avatar.jpg?alt=media&token=057e9e50-5f95-4123-967c-ede0dea7076a',
-                id: fire.auth().currentUser.uid
+                id: fire.auth().currentUser.uid,
+                daily_food: {}
             }).then(() => 
             {
                 console.log("Document successfully written!");
