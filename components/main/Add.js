@@ -84,7 +84,7 @@ export default function Add({ navigation }) {
 
       <View style={{ flexDirection: 'row'}}>
 
-        //TODO: fix button styling
+        {/*TODO: fix button styling*/}
         <Button title="Take Picture" style={styles.buttonStyle} onPress={() => takePicture()}/>
         <Button title="From Gallery" style={styles.buttonStyle} onPress={() => pickImage()}/>
         <Button title="Barcode" style={styles.buttonStyle} onPress={() => navigation.navigate('BarcodeScreen')}/>

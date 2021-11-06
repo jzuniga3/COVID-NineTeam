@@ -11,7 +11,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FeedScreen from './main/Feed'
 import ProfileScreen from './main/Profile'
 import UserlistScreen from './main/Userlist'
-import FoodScreen from './main/Food'
 
 const Tab = createMaterialBottomTabNavigator(); 
 
@@ -27,13 +26,6 @@ export class Main extends Component {
         return (
             <Tab.Navigator initialRouteName="Feed" labeled={false}>
                 <Tab.Screen name="Feed" component={FeedScreen} 
-                    options= {{
-                        tabBarIcon: ({color, size}) => (
-                            <MaterialCommunityIcons name="home" color={color} size={26}/>
-                        ), tabBarLabelPosition: 'below-icon'
-                    }}
-                />
-                <Tab.Screen name="Food" component={FoodScreen} 
                     options= {{
                         tabBarIcon: ({color, size}) => (
                             <MaterialCommunityIcons name="pizza" color={color} size={26}/>
