@@ -35,15 +35,14 @@ export default function Feed()
     let newDailyFood = undefined;
     let newFoodName = "";
     let newFoodCalories = "";
+
+    dailyFoodList = [];
     
 
     function updateFeed()
     {
-        usersDB.doc(userID).update(
-            {
-                daily_food: newDailyFood
-            })
-
+        usersDB.doc(userID).collection("DailyFood").add(newDailyFood);
+     
         setUserDataIsRetrieved(false);
     }
       
@@ -102,6 +101,7 @@ export default function Feed()
         newDailyFood = {name: name, calories: calories};
         // let id = Object.keys(newDailyFood).length + 1;
         // newDailyFood[id] = {name: name, calories: calories};
+        dailyFoodList.push(newDailyFood);
         updateFeed();
         alert("You added: " + name);
 
