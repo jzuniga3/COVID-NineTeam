@@ -25,11 +25,14 @@ export default function Feed()
     const [inches, setInches] = useState("");
     const [purpose, setPurpose] = useState("");
     const [dailyFood, setDailyFood] = useState(null);
+    const [splitDailyFood, setSplitDailyFood] = useState(null);
     let totalHeight = ((feet * 12) + Number(inches));
 
     const [recommendedCalories, setRecommendedCalories] = useState("");
     const [purposeCalories, setPurposeCalories] = useState("");
     const [dailyCalories, setDailyCalories] = useState(0);
+    const [startIndex, setStartIndex] = useState(5);
+    const [endIndex, setEndIndex] = useState(10);
 
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
     let newDailyFood = undefined;
@@ -69,6 +72,7 @@ export default function Feed()
             {
                 let dailyFoodData = querySnapshot.docs.map(doc => doc.data())
                 setDailyFood(dailyFoodData);
+                setSplitDailyFood(dailyFoodData.slice(0, 5))
 
                 setUserDataIsRetrieved(true);
 
@@ -156,7 +160,7 @@ export default function Feed()
 
     const continueList = (start, end) =>
     {
-        setSplitUserList(dailyFood.concat(userList.slice(start, end)));
+        setSplitDailyFood(splitDailyFood.concat(dailyFood.slice(start, end)));
         setStartIndex(startIndex + 5);
         setEndIndex(endIndex + 5);
     }
