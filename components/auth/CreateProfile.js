@@ -51,11 +51,10 @@ export default class CreateProfile extends Component {
     //         return 65 + (4.3 * this.state.weight) + (4.7 * totalHeight) - (4.7 * this.state.age)
     //     }
     // }
-    calcBMI =() =>
+    calcBMI = () =>
     {
-        let totalHeight = (this.state.feet * 12) + this.state.inches;
-
-        return (((this.state.weight / (totalHeight * totalHeight)) * 703)*100).toFixed(2)
+        let totalHeight = (this.state.feet * 12) + parseFloat(this.state.inches);
+        return ((this.state.weight * 703) / (totalHeight * totalHeight)).toFixed(2);
     }
 
 
