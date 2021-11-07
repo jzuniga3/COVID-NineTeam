@@ -26,6 +26,12 @@ export class Main extends Component {
         return (
             <Tab.Navigator initialRouteName="Feed" labeled={false}>
                 <Tab.Screen name="Feed" component={FeedScreen} 
+                listeners={({ navigation }) => ({
+                    tabPress: event => {
+                        event.preventDefault();
+                        navigation.navigate("Feed", { userDataIsRetrieved: false})
+                    }
+                })}
                     options= {{
                         tabBarIcon: ({color, size}) => (
                             <MaterialCommunityIcons name="pizza" color={color} size={26}/>

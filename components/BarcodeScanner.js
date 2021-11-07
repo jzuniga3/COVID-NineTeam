@@ -1,5 +1,5 @@
 import React, { useState, useEffect }  from "react";
-import {Text, View, StyleSheet, TouchableOpacity, Dimensions, Button} from "react-native";
+import {Text, View, StyleSheet, TouchableOpacity, Dimensions, Button, Alert} from "react-native";
 import {BarCodeScanner} from "expo-barcode-scanner";
 import {sendApiRequest} from "../screens/old/Edamam";
 import styles from '../screens/old/globalstyles.js';
@@ -12,6 +12,11 @@ export const BarcodeScanner = () => {
     const [scanned, setScanned] = useState(false);
     const [pageSwitch, setPageSwitch] = useState(false);
     const [calories, setCalories] = useState(0);
+    const [foodName, setFoodName] = useState("");
+
+    const usersDB = fire.firestore().collection('users')
+    const userID = fire.auth().currentUser.uid
+
     useEffect(() => {
         (async () => {
             const {status} = await BarCodeScanner.requestPermissionsAsync();
@@ -30,6 +35,21 @@ export const BarcodeScanner = () => {
             setCalories(data);
         }))
     }
+
+    function handleSaveFood(name) {
+        name => console.log("OK Pressed, Food Name: " + name)
+        setFoodName(name)
+        let newDailyFood = { name: name, calories: calories}
+
+        usersDB.doc(userID).collection("DailyFood").add(newDailyFood)
+        .then((result) => {
+            console.log(result)
+        })
+        .catch((error) => {
+            console.log(error)
+            Alert.alert('Error', error.message, [{text: 'OK'},], {cancelable: true});
+        });
+    }
 //triggered after scanning barcode, flips switches and transitions to calorie view
     const handleBarCodeScanned = ({data}) => {
         setScanned(true);
@@ -45,6 +65,24 @@ export const BarcodeScanner = () => {
     if (hasPermission === false) {
         return <Text>No access to camera</Text>;
     }
+
+    function addToFood() {
+        Alert.prompt(
+            "Enter Food Name",
+            "",
+            [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel"
+                },
+                {
+                  text: "OK",
+                  onPress: (name) => handleSaveFood(name)
+                }
+              ],
+        )
+    }
 // returns the page view for the barcode scanner
     return (
         <>
@@ -54,6 +92,9 @@ export const BarcodeScanner = () => {
             <Text>Calories: {calories}</Text>
             <TouchableOpacity style={styles.loginBtn} onPress={pageSwitchHandler}>
                 <Text>Scan Again</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.loginBtn} onPress={addToFood}>
+                <Text>Add To Food</Text>
             </TouchableOpacity>
 
         </View>

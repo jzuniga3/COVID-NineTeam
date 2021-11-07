@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 
 import fire from '../fire'
-import { Text, View, Button, TextInput, Image, FlatList, TouchableOpacity } from 'react-native'
+import { Text, View, Button, TextInput, Image, FlatList, TouchableOpacity, useEffect } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import colors from '../../assets/colors/colors'
@@ -182,6 +182,8 @@ export default function Feed()
     {
         getUserInfo();
     }
+
+    
 
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
