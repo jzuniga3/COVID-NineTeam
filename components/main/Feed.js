@@ -232,12 +232,12 @@ export default function Feed()
                     data={dailyFood}
                     renderItem={({item}) => 
                         <View style = {styles.foodData}>
-                            <TouchableOpacity onPress = {() => togglePopup(item)}>
+                            {/* <TouchableOpacity onPress = {() => togglePopup(item)}> */}
                                 <View style={{ alignItems: 'center', flexDirection: 'row'}}>
                                     <Text style= {styles.foodName}>{item.name}{" "}</Text>
                                     <Text style = {styles.foodCalories}>{item.calories}{'\n'}</Text>
                                 </View>
-                            </TouchableOpacity>
+                            {/* </TouchableOpacity> */}
                         </View>}
                     onEndReached = {() => continueList(startIndex, endIndex)}
                     onEndReachedThreshold = {1}
