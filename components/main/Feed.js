@@ -12,29 +12,29 @@ export default function Feed()
     //calorie log  
     ///** lookup how to take collections in firebase   make new collection under current user then start current collect. 
     // can a sub collection run under each user where they can enter their calories and it log (name,date,calories)
-   let today = new Date();
-   let logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
+    let today = new Date();
+    let logDate = today.toDateString(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate());
 
-   const usersDB = fire.firestore().collection('users')
-   const userID = fire.auth().currentUser.uid
+    const usersDB = fire.firestore().collection('users')
+    const userID = fire.auth().currentUser.uid
 
-   const [sex, setSex] = useState("");
-   const [age, setAge] = useState("");
-   const [weight, setWeight] = useState("");
-   const [feet, setFeet] = useState("");
-   const [inches, setInches] = useState("");
-   const [purpose, setPurpose] = useState("");
-   const [dailyFood, setDailyFood] = useState("");
-   let totalHeight = ((feet * 12) + Number(inches));
+    const [sex, setSex] = useState("");
+    const [age, setAge] = useState("");
+    const [weight, setWeight] = useState("");
+    const [feet, setFeet] = useState("");
+    const [inches, setInches] = useState("");
+    const [purpose, setPurpose] = useState("");
+    const [dailyFood, setDailyFood] = useState("");
+    let totalHeight = ((feet * 12) + Number(inches));
 
-   const [recommendedCalories, setRecommendedCalories] = useState("");
-   const [purposeCalories, setPurposeCalories] = useState("");
-   const [dailyCalories, setDailyCalories] = useState("");
+    const [recommendedCalories, setRecommendedCalories] = useState("");
+    const [purposeCalories, setPurposeCalories] = useState("");
+    const [dailyCalories, setDailyCalories] = useState(0);
 
-   const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
-   let newDailyFood = {};
-   let newFoodName = "";
-   let newFoodCalories = "";
+    const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
+    let newDailyFood = {};
+    let newFoodName = "";
+    let newFoodCalories = "";
 
     function updateFeed()
     {
@@ -61,6 +61,8 @@ export default function Feed()
                 setUserDataIsRetrieved(true);
 
                 calculateCalories();
+
+                changeDailyCalories();
             }))
     }
 
@@ -101,6 +103,23 @@ export default function Feed()
         newDailyFood[id] = {name: name, calories: calories};
         updateFeed();
         alert("You added: " + name);
+
+        changeDailyCalories();
+    }
+
+    function changeDailyCalories()
+    {
+        let currentCals = 0;
+
+        if (Object.keys(dailyFood).length > 0)
+        {
+            Object.keys(dailyFood).forEach(key => 
+            {
+                currentCals += parseFloat(dailyFood[key].calories);
+            })
+        }
+
+        setDailyCalories(currentCals);
     }
 
     //Recommended calories to maintain weight   
@@ -166,7 +185,7 @@ export default function Feed()
                 </View>
 
                 <View style = {styles.feedRow}>
-                    <Text style = {styles.feedData}>Current Daily Calories: </Text>
+                    <Text style = {styles.feedData}>Current Daily Calories: {dailyCalories} Cal</Text>
                 </View>
 
                 <View style = {styles.feedRow}>
