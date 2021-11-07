@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { StatusBar } from 'expo-status-bar'
 
 import fire from '../fire'
-import { Text, View, Button, TextInput, Image } from 'react-native'
+import { Text, View, Button, TextInput, Image, FlatList, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LinearGradient } from 'expo-linear-gradient'
 import colors from '../../assets/colors/colors'
@@ -154,6 +154,13 @@ export default function Feed()
         calculatePurposeCalories(calories);
     }
 
+    const continueList = (start, end) =>
+    {
+        setSplitUserList(dailyFood.concat(userList.slice(start, end)));
+        setStartIndex(startIndex + 5);
+        setEndIndex(endIndex + 5);
+    }
+
     //calculates calories needed to gain or lose weight depending on user's purpose
     function calculatePurposeCalories(calories)
     {
@@ -217,6 +224,20 @@ export default function Feed()
                         onPress = {() => validateFoodInputs(newFoodName, newFoodCalories)}
                     />
                 </View>
+                <FlatList
+                    data={dailyFood}
+                    renderItem={({item}) => 
+                        <View style = {styles.foodData}>
+                            <TouchableOpacity onPress = {() => togglePopup(item)}>
+                                <View style={{ alignItems: 'center', flexDirection: 'row'}}>
+                                    <Text style= {styles.foodName}>{item.name}{" "}</Text>
+                                    <Text style = {styles.foodCalories}>{item.calories}{'\n'}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>}
+                    onEndReached = {() => continueList(startIndex, endIndex)}
+                    onEndReachedThreshold = {1}
+                    />
 
             </View>
         </SafeAreaView>
@@ -269,5 +290,17 @@ const styles =
         fontFamily: 'NunitoSans-Bold',
         color: '#000000'
     },
+    foodData: 
+    {
+
+    },
+    foodName:
+    {
+
+    },
+    foodCalories:
+    {
+
+    }
 
 }
