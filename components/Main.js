@@ -48,7 +48,7 @@ export class Main extends Component {
                     })}
                     options= {{
                         tabBarIcon: ({color, size}) => (
-                            <MaterialCommunityIcons name="plus-box" color={color} size={26}/>
+                            <MaterialCommunityIcons name="camera" color={color} size={26}/>
                         ), tabBarLabelPosition: 'below-icon'
                     }}
                 />
