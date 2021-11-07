@@ -32,16 +32,17 @@ export default function Feed()
     const [dailyCalories, setDailyCalories] = useState(0);
 
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
-    let newDailyFood = {};
+    let newDailyFood = undefined;
     let newFoodName = "";
     let newFoodCalories = "";
+    
 
     function updateFeed()
     {
-    usersDB.doc(userID).update(
-        {
-            daily_food: newDailyFood
-        })
+        usersDB.doc(userID).update(
+            {
+                daily_food: newDailyFood
+            })
 
         setUserDataIsRetrieved(false);
     }
@@ -62,7 +63,7 @@ export default function Feed()
 
                 calculateCalories();
 
-                // changeDailyCalories();
+                changeDailyCalories();
             }))
     }
 
@@ -98,20 +99,20 @@ export default function Feed()
 
     function typeNewFood(name, calories)
     {
-        newDailyFood = dailyFood;
-        let id = Object.keys(dailyFood).length + 1;
-        newDailyFood[id] = {name: name, calories: calories};
+        newDailyFood = {name: name, calories: calories};
+        // let id = Object.keys(newDailyFood).length + 1;
+        // newDailyFood[id] = {name: name, calories: calories};
         updateFeed();
         alert("You added: " + name);
 
-        changeDailyCalories();
+        // changeDailyCalories();
     }
 
     function changeDailyCalories()
     {
         let currentCals = 0;
 
-        if (Object.keys(dailyFood).length > 0)
+        if (Object.keys(dailyFood).length != 0)
         {
             Object.keys(dailyFood).forEach(key => 
             {
