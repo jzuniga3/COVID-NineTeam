@@ -78,6 +78,81 @@ export default function Userlist()
         }).catch(function(error) {console.log('Error getting documents: ', error)})
     }
 
+    function sendFriendRequest(user2)
+    {
+        usersDB.doc(user2.id).collection("friendRequests").get().then(function(querySnapshot) 
+        {
+            let friendRequests = querySnapshot.docs.map(doc => doc.data());
+            let hasPendingRequest = false;
+
+            for (let i = 0; i < friendRequests.length; i++)
+            {
+                if (friendRequests[i].userID == currentUserID)
+                {
+                    hasPendingRequest = true;
+                }
+            }
+
+            if (hasPendingRequest)
+            {
+                alert("Friend request already pending.");
+            }
+            else
+            {
+                usersDB.doc(user2.id).collection("friendRequests").add({userID: currentUserID});
+                alert("Friend request sent!");
+                checkForAcceptFriendRequest(user2.id);
+            }
+
+        }).catch(function(error) {console.log('Error getting documents: ', error)})
+    }
+
+    function checkForAcceptFriendRequest(user2ID)
+    {
+        usersDB.doc(currentUserID).collection("friendRequests").get().then(function(querySnapshot) 
+        {
+            let friendRequests = querySnapshot.docs.map(doc => doc.data());
+            let hasPendingRequest = false;
+
+            for (let i = 0; i < friendRequests.length; i++)
+            {
+                if (friendRequests[i].userID == user2ID)
+                {
+                    hasPendingRequest = true;
+                }
+            }
+
+            if (hasPendingRequest)
+            {
+                acceptFriendRequest(user2ID);
+            }
+
+        }).catch(function(error) {console.log('Error getting documents: ', error)})
+    }
+
+    function acceptFriendRequest(user2ID)
+    {
+        friendsDB.get().then(function(querySnapshot) 
+        {
+            let friendshipData = querySnapshot.docs.map(doc => doc.data());
+            let friendshipExists = false;
+
+            for (let i = 0; i < friendshipData.length; i++)
+            {
+                if ((friendshipData[i].user1 == currentUserID && friendshipData[i].user2 == user2ID) || 
+                (friendshipData[i].user2 == currentUserID && friendshipData[i].user1 == user2ID))
+                {
+                    friendshipExists = true;
+                }
+            }
+
+            if (!friendshipExists)
+            {
+                friendsDB.add({user1: user2ID, user2: currentUserID})
+            }
+        }).catch(function(error) {console.log('Error getting documents: ', error)})
+    }
+
     return (
         <LinearGradient colors={[colors.lightBlue, colors.darkBlue]} style={styles.outerScreen}>
         <SafeAreaView style = {styles.contentCenter}>
@@ -117,7 +192,7 @@ export default function Userlist()
 
 
                             {isFriend == false && popupItem.id != currentUserID &&
-                                <TouchableOpacity onPress = {() => alert('yo')}>
+                                <TouchableOpacity onPress = {() => sendFriendRequest(popupItem)}>
                                     <Text>Send Friend Request</Text>
                                 </TouchableOpacity>
                             }
