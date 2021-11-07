@@ -11,9 +11,14 @@ export default function Userlist()
     const [userList, setUserList] = useState(null);
     const [splitUserList, setSplitUserList] = useState(null);
     const usersDB = fire.firestore().collection('users');
+    const friendsDB = fire.firestore().collection('friendships');
     const [userDataIsRetrieved, setUserDataIsRetrieved] = useState(false);
+    
     const [popupOpen, setPopupOpen] = useState(false);
     const [popupItem, setPopupItem] = useState(null);
+
+    const [isFriend, setIsFriend] = useState(false);
+    const currentUserID = fire.auth().currentUser.uid;
 
     const [startIndex, setStartIndex] = useState(5);
     const [endIndex, setEndIndex] = useState(10);
@@ -39,6 +44,8 @@ export default function Userlist()
         if (item != null)
         {
             setPopupItem(item);
+
+            checkFriends(item)
         }
     }
 
@@ -52,6 +59,23 @@ export default function Userlist()
     if (userDataIsRetrieved == false)
     {
         getUsers();
+    }
+
+    function checkFriends(user2)
+    {
+        friendsDB.get().then(function(querySnapshot) 
+        {
+            let friendshipData = querySnapshot.docs.map(doc => doc.data());
+
+            for (let i = 0; i < friendshipData.length; i++)
+            {
+                if ((friendshipData[i].user1 == currentUserID && friendshipData[i].user2 == user2.id) || 
+                (friendshipData[i].user2 == currentUserID && friendshipData[i].user1 == user2.id))
+                {
+                    setIsFriend(true);
+                }
+            }
+        }).catch(function(error) {console.log('Error getting documents: ', error)})
     }
 
     return (
@@ -82,7 +106,7 @@ export default function Userlist()
                 <Modal animationType = 'none' visible = {popupOpen} transparent = {true}>
                     <View style = {styles.center}>
                         <View style = {styles.modalBody}>
-                            <TouchableOpacity onPress = {() => togglePopup(null)}>
+                            <TouchableOpacity onPress = {() => {togglePopup(null); setIsFriend(false);}}>
                                 <Text style = {styles.xbutton}>X</Text>
                             </TouchableOpacity>
                             <Text>{popupItem.first_name}</Text>
@@ -90,6 +114,16 @@ export default function Userlist()
                             <Text>{popupItem.feet}' {popupItem.inches}"</Text>
                             <Text>{popupItem.weight}lbs</Text>
                             <Text>{popupItem.bmi}</Text>
+
+
+                            {isFriend == false && popupItem.id != currentUserID &&
+                                <TouchableOpacity onPress = {() => alert('yo')}>
+                                    <Text>Send Friend Request</Text>
+                                </TouchableOpacity>
+                            }
+                            {isFriend == true &&
+                                <Text>You are friends!</Text>
+                            }
                         </View>
                     </View>
                 </Modal>}
