@@ -41,7 +41,14 @@ export default function Feed()
 
     function updateFeed()
     {
-        usersDB.doc(userID).collection("DailyFood").add(newDailyFood);
+        usersDB.doc(userID).collection("DailyFood").add(newDailyFood)
+        .then((result) => {
+            console.log(result)
+        })
+        .catch((error) => {
+            console.log(error)
+            Alert.alert('Error', error.message, [{text: 'OK'},], {cancelable: true});
+        });
      
         setUserDataIsRetrieved(false);
     }
@@ -107,16 +114,16 @@ export default function Feed()
 
         // changeDailyCalories();
     }
-
+wwwww
     function changeDailyCalories()
     {
         let currentCals = 0;
 
-        if (Object.keys(dailyFood).length != 0)
+        if (Object.keys(dailyFoodList).length != 0)
         {
-            Object.keys(dailyFood).forEach(key => 
+            Object.keys(dailyFoodList).forEach(key => 
             {
-                currentCals += parseFloat(dailyFood[key].calories);
+                currentCals += parseFloat(dailyFoodList[key].calories);
             })
         }
 
