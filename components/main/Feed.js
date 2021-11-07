@@ -36,7 +36,7 @@ export default function Feed()
     let newFoodName = "";
     let newFoodCalories = "";
     
-    
+
     function updateFeed()
     {
         usersDB.doc(userID).collection("DailyFood").add(newDailyFood)
@@ -122,7 +122,7 @@ export default function Feed()
     {
         let currentCals = 0;
 
-        if (dailyFood.length != 0)
+        if (dailyFood != null)
         {
             for (let i = 0; i < dailyFood.length; i++)
             {
