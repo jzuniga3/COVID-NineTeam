@@ -101,9 +101,8 @@ export default function Profile()
 
     const calcBMI = () =>
     {
-        let totalHeight = (feet * 12) + inches;
-
-        return (((weight / (totalHeight * totalHeight)) * 703)*100).toFixed(2)
+        let totalHeight = (feet * 12) + parseFloat(inches);
+        return ((weight * 703) / (totalHeight * totalHeight)).toFixed(2);
     }
 
     //Get user information from firestore

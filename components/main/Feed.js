@@ -24,7 +24,7 @@ export default function Feed()
     const [feet, setFeet] = useState("");
     const [inches, setInches] = useState("");
     const [purpose, setPurpose] = useState("");
-    const [dailyFood, setDailyFood] = useState("");
+    const [dailyFood, setDailyFood] = useState(null);
     let totalHeight = ((feet * 12) + Number(inches));
 
     const [recommendedCalories, setRecommendedCalories] = useState("");
@@ -35,10 +35,8 @@ export default function Feed()
     let newDailyFood = undefined;
     let newFoodName = "";
     let newFoodCalories = "";
-
-    dailyFoodList = [];
     
-
+    
     function updateFeed()
     {
         usersDB.doc(userID).collection("DailyFood").add(newDailyFood)
@@ -63,14 +61,20 @@ export default function Feed()
                 setInches(snapshot.data().inches);
                 setAge(snapshot.data().age);
                 setPurpose(snapshot.data().purpose);
-                setDailyFood(snapshot.data().daily_food);
-        
-                setUserDataIsRetrieved(true);
 
                 calculateCalories();
+            }))
+        
+        usersDB.doc(userID).collection("DailyFood").get().then(function(querySnapshot)
+            {
+                let dailyFoodData = querySnapshot.docs.map(doc => doc.data())
+                setDailyFood(dailyFoodData);
+
+                setUserDataIsRetrieved(true);
 
                 changeDailyCalories();
-            }))
+
+            }).catch(function(error) {console.log('Error getting documents: ', error)})
     }
 
     function validateFoodInputs(name, calories)
@@ -108,23 +112,22 @@ export default function Feed()
         newDailyFood = {name: name, calories: calories};
         // let id = Object.keys(newDailyFood).length + 1;
         // newDailyFood[id] = {name: name, calories: calories};
-        dailyFoodList.push(newDailyFood);
         updateFeed();
         alert("You added: " + name);
 
-        // changeDailyCalories();
+        changeDailyCalories();
     }
-wwwww
+
     function changeDailyCalories()
     {
         let currentCals = 0;
 
-        if (Object.keys(dailyFoodList).length != 0)
+        if (dailyFood.length != 0)
         {
-            Object.keys(dailyFoodList).forEach(key => 
+            for (let i = 0; i < dailyFood.length; i++)
             {
-                currentCals += parseFloat(dailyFoodList[key].calories);
-            })
+                currentCals += parseFloat(dailyFood[i].calories);
+            }
         }
 
         setDailyCalories(currentCals);

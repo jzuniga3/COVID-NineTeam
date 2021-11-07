@@ -48,7 +48,6 @@ export default class CreateProfile extends Component {
                 purpose,
                 profilePicId: 'https://firebasestorage.googleapis.com/v0/b/weightexchangeapplication.appspot.com/o/image%2Fdefault-avatar.jpg?alt=media&token=057e9e50-5f95-4123-967c-ede0dea7076a',
                 id: fire.auth().currentUser.uid,
-                daily_food: {}
             }).then(() => 
             {
                 console.log("Document successfully written!");
@@ -67,7 +66,7 @@ export default class CreateProfile extends Component {
 
     validatePurpose = () =>
     {
-        if (this.state.purpose != '' || 'Would you like to donate weight, or receive weight?')
+        if (this.state.purpose != '' && this.state.purpose != 'Would you like to donate weight, or receive weight?')
         {
             this.onSignUp();
         }
