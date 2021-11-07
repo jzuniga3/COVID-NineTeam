@@ -10,13 +10,7 @@ export default function BarcodeScreen() {
     }
     return (
     <>
-        {isItScanning ?(<BarcodeScanner/>):(
-                    <>
-                        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                            <TouchableOpacity onPress = {isScanningHandler}><Text>Scan Calories With UPC</Text></TouchableOpacity>
-                        </View>
-                    </>
-        )}
+        <BarcodeScanner/>
     </>
     )
 }
