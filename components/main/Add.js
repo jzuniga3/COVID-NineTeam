@@ -67,9 +67,9 @@ export default function Add({ navigation }) {
           ratio={'1:1'} />
       </View>
       
-      <View style={{ flex: 1, flexDirection:'row', justifyContent: 'space-around', 
+      <View style={{ flex: 1, flexDirection:'row', justifyContent: 'space-evenly', 
       // change this back to flex eventually
-      position: 'absolute', bottom: 0, marginLeft: 40, marginBottom: 10 }}>
+      position: 'absolute', bottom: 0, marginLeft: 0, marginBottom: 10 }}>
       <Button
         title="Flip Image"
         
@@ -81,14 +81,9 @@ export default function Add({ navigation }) {
           );
         }}>
       </Button>
-
-      <View style={{ flexDirection: 'row'}}>
-
-        {/*TODO: fix button styling*/}
-        <Button title="Take Picture" style={styles.buttonStyle} onPress={() => takePicture()}/>
-        <Button title="From Gallery" style={styles.buttonStyle} onPress={() => pickImage()}/>
-        <Button title="Barcode" style={styles.buttonStyle} onPress={() => navigation.navigate('BarcodeScreen')}/>
-      </View>
+      <Button title="Take Picture" style={styles.buttonStyle} onPress={() => takePicture()}/>
+      <Button title="From Gallery" style={styles.buttonStyle} onPress={() => pickImage()}/>
+      <Button title="Barcode" style={styles.buttonStyle} onPress={() => navigation.navigate('BarcodeScreen')}/>
       {/* <Button title="Save" onPress={() => navigation.navigate('Save', {image})}/> */}
       </View>
       {/* {image && <Image source={{uri: image}} style={{flex: 1}}/>} */}
