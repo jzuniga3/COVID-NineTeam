@@ -174,6 +174,7 @@ export default function Userlist()
                         </View>}
                     onEndReached = {() => continueList(startIndex, endIndex)}
                     onEndReachedThreshold = {1}
+                    keyExtractor = {(item, index) => index.toString()}
                     />
                 }
 

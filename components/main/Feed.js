@@ -225,26 +225,34 @@ export default function Feed()
                         returnKeyType = 'done'
                         onChangeText = {editedFoodCalories => newFoodCalories = editedFoodCalories}
                     />
-                    <Button
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                <Button
                         title = 'Add Food'
                         onPress = {() => validateFoodInputs(newFoodName, newFoodCalories)}
                     />
+                    <Button
+                    title = 'Refresh'
+                    onPress = {() => getUserInfo()}
+                />
                 </View>
                 <FlatList
                     data={dailyFood}
                     renderItem={({item}) => 
                         <View style = {styles.foodData}>
                             {/* <TouchableOpacity onPress = {() => togglePopup(item)}> */}
-                                <View style={{ alignItems: 'center', flexDirection: 'row'}}>
+                                <View style={{ flex: 1, flexDirection: 'row'}}>
                                     <Text style= {styles.foodName}>{item.name}{" "}</Text>
-                                    <Text style = {styles.foodCalories}>{item.calories}{'\n'}</Text>
+                                    <Text style= {styles.foodCalories}>{item.calories}</Text>
+                                    {/* <Text style = {styles.foodCalories}>{item.calories}{'\n'}</Text> */}
                                 </View>
                             {/* </TouchableOpacity> */}
                         </View>}
                     onEndReached = {() => continueList(startIndex, endIndex)}
                     onEndReachedThreshold = {1}
+                    keyExtractor = {(item, index) => index.toString()}
                     />
-
+                    
             </View>
         </SafeAreaView>
         </LinearGradient>
@@ -298,15 +306,18 @@ const styles =
     },
     foodData: 
     {
-
     },
     foodName:
     {
-
+        fontSize: 20,
+        color: '#000',
+        fontFamily: 'NunitoSans-Bold',
     },
     foodCalories:
     {
-
+        fontSize: 20,
+        color: '#000',
+        fontFamily: 'NunitoSans-Regular',
     }
 
 }
